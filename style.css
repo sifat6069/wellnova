@@ -1,6 +1,158 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
 body{
-    background:#111827;
-    color:white;
-    text-align:center;
-    font-family:Arial,sans-serif;
+background:#0b0f19;
+color:white;
+}
+
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:#111827;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+.logo{
+font-size:30px;
+font-weight:700;
+color:#8b5cf6;
+}
+
+nav ul{
+display:flex;
+list-style:none;
+gap:30px;
+}
+
+nav ul li{
+cursor:pointer;
+transition:.3s;
+}
+
+nav ul li:hover{
+color:#8b5cf6;
+}
+
+header{
+padding:80px 20px;
+text-align:center;
+background:linear-gradient(135deg,#111827,#4c1d95);
+}
+
+header h1{
+font-size:55px;
+margin-bottom:15px;
+}
+
+header p{
+font-size:20px;
+color:#ddd;
+margin-bottom:25px;
+}
+
+header input{
+width:90%;
+max-width:600px;
+padding:16px;
+border:none;
+border-radius:30px;
+font-size:18px;
+outline:none;
+}
+
+.category{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:15px;
+padding:35px;
+}
+
+.category button{
+padding:12px 22px;
+border:none;
+border-radius:30px;
+background:#8b5cf6;
+color:white;
+cursor:pointer;
+font-size:15px;
+transition:.3s;
+}
+
+.category button:hover{
+background:#6d28d9;
+transform:translateY(-2px);
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
+padding:40px;
+}
+
+.card{
+background:#161b22;
+border-radius:18px;
+overflow:hidden;
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-8px);
+box-shadow:0 15px 40px rgba(139,92,246,.35);
+}
+
+.card img{
+width:100%;
+height:380px;
+object-fit:cover;
+}
+
+.card h3{
+padding:15px;
+}
+
+.card button{
+margin:0 15px 20px;
+width:calc(100% - 30px);
+padding:14px;
+border:none;
+border-radius:12px;
+background:#8b5cf6;
+color:white;
+cursor:pointer;
+font-size:16px;
+transition:.3s;
+}
+
+.card button:hover{
+background:#6d28d9;
+}
+
+@media(max-width:768px){
+
+nav{
+flex-direction:column;
+gap:15px;
+}
+
+nav ul{
+flex-wrap:wrap;
+justify-content:center;
+}
+
+header h1{
+font-size:38px;
+}
+
 }
