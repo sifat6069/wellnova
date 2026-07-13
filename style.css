@@ -52,14 +52,13 @@ color:#9b5cff;
 /* HERO */
 
 .hero{
-min-height:85vh;
-background:url("assets/hero.jpg") center center/cover no-repeat;
+height:100vh;
+background:url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=2000") center center/cover no-repeat;
 display:flex;
 justify-content:center;
 align-items:center;
 text-align:center;
 position:relative;
-padding:120px 20px 80px;
 }
 
 .overlay{
