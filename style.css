@@ -53,7 +53,8 @@ color:#9b5cff;
 
 .hero{
     height:100vh;
-    background:url("assets/hero.png") center center/cover no-repeat;
+    margin-top:80px;
+    background:url("assets/hero.jpg") center center/cover no-repeat;
     display:flex;
     justify-content:center;
     align-items:center;
@@ -69,10 +70,12 @@ background:rgba(0,0,0,.55);
 }
 
 .hero-content{
-position:relative;
-z-index:2;
-max-width:900px;
-padding:20px;
+    position:relative;
+    z-index:2;
+    max-width:900px;
+    padding:20px;
+
+    margin-top:120px;
 }
 
 .hero h1{
