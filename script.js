@@ -1,67 +1,69 @@
-import { auth, provider } from "./firebase.js";
+import { auth, provider, db } from "./firebase.js";
+
 import {
   signInWithPopup,
   onAuthStateChanged,
   signOut
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
+import {
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
 // Search
 const searchBox = document.getElementById("searchBox");
 
 if (searchBox) {
   searchBox.addEventListener("keyup", function () {
-
     const value = this.value.toLowerCase();
 
     document.querySelectorAll(".card").forEach(card => {
-
       const title = card.querySelector("h3").textContent.toLowerCase();
-
       card.style.display = title.includes(value) ? "block" : "none";
-
     });
-
   });
 }
 
 // Google Login
-
 window.googleLogin = async function () {
-
   try {
+    const result = await signInWithPopup(auth, provider);
 
-    await signInWithPopup(auth, provider);
+    const user = result.user;
 
-    alert("Login Successful ✅");
+    await setDoc(doc(db, "users", user.uid), {
+      uid: user.uid,
+      name: user.displayName,
+      email: user.email,
+      photo: user.photoURL
+    });
+
+    alert("Welcome " + user.displayName);
 
   } catch (err) {
-
     alert(err.message);
-
+    console.error(err);
   }
-
 };
 
-// Logout
-
-window.logout = async function () {
-
-  await signOut(auth);
-
-};
-
-// User State
-
+// Login / Logout Button
 onAuthStateChanged(auth, (user) => {
 
-  if (user) {
+  const btn = document.querySelector("button[onclick='googleLogin()']");
 
-    console.log("Logged in:", user.displayName);
+  if (!btn) return;
+
+  if (user) {
+    btn.textContent = "Logout";
+
+    btn.onclick = async () => {
+      await signOut(auth);
+    };
 
   } else {
-
-    console.log("No User");
-
+    btn.textContent = "Login";
+    btn.onclick = googleLogin;
   }
 
 });
