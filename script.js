@@ -50,20 +50,29 @@ window.googleLogin = async function () {
 // Login / Logout Button
 onAuthStateChanged(auth, (user) => {
 
-  const btn = document.querySelector("button[onclick='googleLogin()']");
-
-  if (!btn) return;
+  const btn = document.getElementById("loginBtn");
+  const name = document.getElementById("userName");
+  const photo = document.getElementById("userPhoto");
 
   if (user) {
-    btn.textContent = "Logout";
 
+    name.textContent = user.displayName;
+    photo.src = user.photoURL;
+    photo.style.display = "block";
+
+    btn.textContent = "Logout";
     btn.onclick = async () => {
       await signOut(auth);
     };
 
   } else {
+
+    name.textContent = "";
+    photo.style.display = "none";
+
     btn.textContent = "Login";
     btn.onclick = googleLogin;
+
   }
 
 });
