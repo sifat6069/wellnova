@@ -2,38 +2,45 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:'Poppins',sans-serif;
 }
 
 body{
-    background:#0b0f1a;
+    background:#0b1120;
     color:#fff;
 }
+
+/* Header */
 
 header{
     position:fixed;
     top:0;
     left:0;
     width:100%;
+    padding:20px 8%;
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:20px 80px;
-    background:rgba(0,0,0,.6);
-    backdrop-filter:blur(10px);
-    z-index:1000;
+    background:rgba(0,0,0,.45);
+    backdrop-filter:blur(12px);
+    z-index:999;
 }
 
 .logo{
-    font-size:35px;
-    font-weight:bold;
+    font-size:32px;
+    font-weight:700;
     color:#9b5cff;
+}
+
+nav{
+    display:flex;
+    gap:30px;
 }
 
 nav a{
     color:#fff;
     text-decoration:none;
-    margin-left:30px;
+    font-weight:500;
     transition:.3s;
 }
 
@@ -41,27 +48,32 @@ nav a:hover{
     color:#9b5cff;
 }
 
+/* Hero */
+
 .hero{
-    width:100%;
     height:100vh;
+    background:url("assets/hero.jpg") center/cover no-repeat;
     display:flex;
     justify-content:center;
     align-items:center;
-    flex-direction:column;
+    position:relative;
     text-align:center;
+}
 
-    background:
-    linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
-    url("assets/hero.png");
+.overlay{
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.55);
+}
 
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
+.hero-content{
+    position:relative;
+    z-index:2;
 }
 
 .hero h1{
     font-size:70px;
-    margin-bottom:20px;
+    margin-bottom:15px;
 }
 
 .hero p{
@@ -70,60 +82,84 @@ nav a:hover{
 }
 
 .search-box{
-    width:500px;
-    max-width:90%;
-    padding:18px 25px;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+
+.search-box input{
+    width:550px;
+    max-width:85vw;
+    padding:18px 22px;
     border:none;
     border-radius:50px;
-    font-size:18px;
     outline:none;
-    background:#fff;
-    color:#000;
+    font-size:18px;
 }
+
+.search-box button{
+    border:none;
+    background:#9b5cff;
+    color:#fff;
+    padding:18px 28px;
+    border-radius:50px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+.search-box button:hover{
+    background:#7d3cff;
+}
+
+/* Categories */
 
 .categories{
     display:flex;
     justify-content:center;
-    gap:15px;
     flex-wrap:wrap;
-    padding:50px 20px;
+    gap:15px;
+    padding:45px 20px;
 }
 
 .categories button{
-    background:#8b5cf6;
-    color:#fff;
     border:none;
-    padding:12px 25px;
+    background:#1b2437;
+    color:#fff;
+    padding:12px 22px;
     border-radius:30px;
     cursor:pointer;
     transition:.3s;
 }
 
 .categories button:hover{
-    background:#6d28d9;
+    background:#9b5cff;
 }
 
+/* Gallery */
+
 .gallery{
+    width:90%;
+    margin:auto;
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
     gap:25px;
-    padding:40px;
+    padding-bottom:80px;
 }
 
 .card{
-    background:#141b2d;
-    border-radius:15px;
+    background:#141d2d;
+    border-radius:18px;
     overflow:hidden;
-    transition:.3s;
+    transition:.35s;
 }
 
 .card:hover{
-    transform:translateY(-10px);
+    transform:translateY(-8px);
 }
 
 .card img{
     width:100%;
-    height:320px;
+    height:340px;
     object-fit:cover;
 }
 
@@ -131,34 +167,45 @@ nav a:hover{
     padding:15px;
 }
 
-.download{
+.card a{
     display:block;
     margin:0 15px 20px;
     padding:12px;
-    text-align:center;
-    background:#8b5cf6;
+    background:#9b5cff;
     color:#fff;
     text-decoration:none;
+    text-align:center;
     border-radius:10px;
 }
 
-.download:hover{
-    background:#6d28d9;
+.card a:hover{
+    background:#7d3cff;
 }
+
+/* Footer */
+
+footer{
+    text-align:center;
+    padding:25px;
+    background:#111827;
+}
+
+/* Mobile */
 
 @media(max-width:768px){
 
 header{
-    padding:20px;
     flex-direction:column;
+    gap:15px;
 }
 
 nav{
-    margin-top:15px;
+    flex-wrap:wrap;
+    justify-content:center;
 }
 
 .hero h1{
-    font-size:45px;
+    font-size:42px;
 }
 
 .hero p{
@@ -166,10 +213,12 @@ nav{
 }
 
 .search-box{
-    width:90%;
+    flex-direction:column;
+    align-items:center;
 }
 
-.gallery{
-    padding:20px;
+.search-box button{
+    width:220px;
 }
+
 }
