@@ -1,59 +1,67 @@
-// WallNova
-
-console.log("WallNova Loaded");
+import { auth, provider } from "./firebase.js";
+import {
+  signInWithPopup,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 // Search
-const searchInput = document.getElementById("searchBox");
-const cards = document.querySelectorAll(".card");
+const searchBox = document.getElementById("searchBox");
 
-if (searchInput) {
+if (searchBox) {
+  searchBox.addEventListener("keyup", function () {
 
-    searchInput.addEventListener("keyup", function () {
+    const value = this.value.toLowerCase();
 
-        const value = this.value.toLowerCase();
+    document.querySelectorAll(".card").forEach(card => {
 
-        cards.forEach(card => {
+      const title = card.querySelector("h3").textContent.toLowerCase();
 
-            const title = card.querySelector("h3").textContent.toLowerCase();
-
-            if (title.includes(value)) {
-                card.style.display = "block";
-            } else {
-                card.style.display = "none";
-            }
-
-        });
+      card.style.display = title.includes(value) ? "block" : "none";
 
     });
 
+  });
 }
 
-// Category Button
+// Google Login
 
-const buttons = document.querySelectorAll(".categories button");
+window.googleLogin = async function () {
 
-buttons.forEach(button => {
+  try {
 
-    button.addEventListener("click", () => {
+    await signInWithPopup(auth, provider);
 
-        buttons.forEach(btn => btn.classList.remove("active"));
+    alert("Login Successful ✅");
 
-        button.classList.add("active");
+  } catch (err) {
 
-    });
+    alert(err.message);
 
-});
+  }
 
-// Download Button
+};
 
-const downloadButtons = document.querySelectorAll(".card button");
+// Logout
 
-downloadButtons.forEach(btn => {
+window.logout = async function () {
 
-    btn.addEventListener("click", () => {
+  await signOut(auth);
 
-        alert("Download Feature Coming Soon 🚀");
+};
 
-    });
+// User State
+
+onAuthStateChanged(auth, (user) => {
+
+  if (user) {
+
+    console.log("Logged in:", user.displayName);
+
+  } else {
+
+    console.log("No User");
+
+  }
 
 });
