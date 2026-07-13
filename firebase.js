@@ -1,60 +1,22 @@
-// Firebase Configuration
+// Import Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-
-import {
-    getAuth,
-    GoogleAuthProvider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-
-import {
-    getFirestore,
-    collection,
-    addDoc,
-    getDocs,
-    doc,
-    updateDoc,
-    deleteDoc
-} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-
+// Firebase Config
 const firebaseConfig = {
-
-    apiKey: "AIzaSyDovsFKGUWXA7hMGznysbweWz3pb_957m0",
-
-    authDomain: "wellnova-419f3.firebaseapp.com",
-
-    projectId: "wellnova-419f3",
-
-    storageBucket: "wellnova-419f3.firebasestorage.app",
-
-    messagingSenderId: "744778511997",
-
-    appId: "1:744778511997:web:9553d13ff5d9dd5e16a314"
-
+  apiKey: "AIzaSyDovsFKGUWXA7hMGznysbweWz3pb_957m0",
+  authDomain: "wellnova-419f3.firebaseapp.com",
+  projectId: "wellnova-419f3",
+  storageBucket: "wellnova-419f3.firebasestorage.app",
+  messagingSenderId: "744778511997",
+  appId: "1:744778511997:web:9553d13ff5d9dd5e16a314",
+  measurementId: "G-83MCD9R2CP"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
-
-const db = getFirestore(app);
-
-const provider = new GoogleAuthProvider();
-
-export {
-    auth,
-    db,
-    provider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged,
-    collection,
-    addDoc,
-    getDocs,
-    doc,
-    updateDoc,
-    deleteDoc
-};
+export const db = getFirestore(app);
+export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();
