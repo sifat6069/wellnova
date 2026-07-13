@@ -13,28 +13,14 @@ import {
   getDocs
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-// Search
-const searchBox = document.getElementById("searchBox");
-
-if (searchBox) {
-  searchBox.addEventListener("input", () => {
-
-    const value = searchBox.value.toLowerCase();
-
-    document.querySelectorAll(".card").forEach(card => {
-
-      const title = card.querySelector("h3").textContent.toLowerCase();
-
-      card.style.display = title.includes(value) ? "" : "none";
-
-    });
-
-  });
-}
-
+// =====================
 // Google Login
+// =====================
+
 window.googleLogin = async function () {
+
   try {
+
     const result = await signInWithPopup(auth, provider);
 
     const user = result.user;
@@ -49,17 +35,25 @@ window.googleLogin = async function () {
     alert("Welcome " + user.displayName);
 
   } catch (err) {
-    alert(err.message);
+
     console.error(err);
+    alert(err.message);
+
   }
+
 };
 
-// Login / Logout Button
+// =====================
+// Login State
+// =====================
+
 onAuthStateChanged(auth, (user) => {
 
   const btn = document.getElementById("loginBtn");
   const name = document.getElementById("userName");
   const photo = document.getElementById("userPhoto");
+
+  if (!btn) return;
 
   if (user) {
 
@@ -68,6 +62,7 @@ onAuthStateChanged(auth, (user) => {
     photo.style.display = "block";
 
     btn.textContent = "Logout";
+
     btn.onclick = async () => {
       await signOut(auth);
     };
@@ -84,55 +79,121 @@ onAuthStateChanged(auth, (user) => {
 
 });
 
-// Load Wallpapers + Category Filter
+// =====================
+// Wallpapers
+// =====================
 
 let allWallpapers = [];
 
 async function loadWallpapers(category = "All") {
 
-    const gallery = document.querySelector(".gallery");
-    if (!gallery) return;
+  const gallery = document.querySelector(".gallery");
 
-    gallery.innerHTML = "";
+  if (!gallery) return;
 
-    if (allWallpapers.length === 0) {
+  gallery.innerHTML = "";
 
-        const snapshot = await getDocs(collection(db, "wallpapers"));
+  if (allWallpapers.length === 0) {
 
-        snapshot.forEach((docSnap) => {
-            allWallpapers.push(docSnap.data());
-        });
+    const snapshot = await getDocs(collection(db, "wallpapers"));
 
-    }
-
-    let wallpapers = allWallpapers;
-
-    if (category !== "All") {
-        wallpapers = allWallpapers.filter(w => w.category === category);
-    }
-
-    wallpapers.forEach((data) => {
-
-        gallery.innerHTML += `
-        <div class="card">
-            <img src="${data.image}" alt="${data.title}">
-            <h3>${data.title}</h3>
-            <button>Download</button>
-        </div>
-        `;
-
+    snapshot.forEach((docSnap) => {
+      allWallpapers.push(docSnap.data());
     });
+
+  }
+
+  let wallpapers = allWallpapers;
+
+  if (category !== "All") {
+    wallpapers = allWallpapers.filter(
+      w => w.category === category
+    );
+  }
+
+  wallpapers.forEach((data) => {
+
+    gallery.innerHTML += `
+      <div class="card">
+
+        <img src="${data.image}" alt="${data.title}">
+
+        <h3>${data.title}</h3>
+
+        <button
+          class="download-btn"
+          data-image="${data.image}">
+          Download
+        </button>
+
+      </div>
+    `;
+
+  });
+
+  // Download Button
+
+  document.querySelectorAll(".download-btn").forEach(btn => {
+
+    btn.onclick = () => {
+
+      const link = document.createElement("a");
+
+      link.href = btn.dataset.image;
+      link.target = "_blank";
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+
+    };
+
+  });
+
+  // Search
+
+  const searchBox = document.getElementById("searchBox");
+
+  if (searchBox) {
+
+    searchBox.oninput = () => {
+
+      const value = searchBox.value.toLowerCase();
+
+      document.querySelectorAll(".card").forEach(card => {
+
+        const title = card
+          .querySelector("h3")
+          .textContent
+          .toLowerCase();
+
+        card.style.display =
+          title.includes(value)
+            ? ""
+            : "none";
+
+      });
+
+    };
+
+  }
 
 }
 
 loadWallpapers();
 
+// =====================
+// Category Filter
+// =====================
+
 document.querySelectorAll(".categories button").forEach(btn => {
 
-    btn.addEventListener("click", () => {
+  btn.addEventListener("click", () => {
 
-        loadWallpapers(btn.dataset.category);
+    loadWallpapers(btn.dataset.category);
 
-    });
+  });
 
 });
