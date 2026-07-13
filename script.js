@@ -8,7 +8,9 @@ import {
 
 import {
   doc,
-  setDoc
+  setDoc,
+  collection,
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 // Search
@@ -76,3 +78,31 @@ onAuthStateChanged(auth, (user) => {
   }
 
 });
+
+// Load Wallpapers From Firestore
+
+async function loadWallpapers() {
+
+    const gallery = document.querySelector(".gallery");
+
+    if (!gallery) return;
+
+    const snapshot = await getDocs(collection(db, "wallpapers"));
+
+    snapshot.forEach((doc) => {
+
+        const data = doc.data();
+
+        gallery.innerHTML += `
+        <div class="card">
+            <img src="${data.image}">
+            <h3>${data.title}</h3>
+            <button>Download</button>
+        </div>
+        `;
+
+    });
+
+}
+
+loadWallpapers();
