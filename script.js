@@ -1,61 +1,59 @@
-// =============================
-// WallNova v1.0
-// =============================
+// WallNova
 
 console.log("WallNova Loaded");
 
-// Search Box
-const searchInput = document.querySelector(".search-box input");
+// Search
+const searchInput = document.getElementById("searchBox");
 const cards = document.querySelectorAll(".card");
 
-searchInput.addEventListener("keyup", function () {
+if (searchInput) {
 
-    const value = this.value.toLowerCase();
+    searchInput.addEventListener("keyup", function () {
 
-    cards.forEach(card => {
+        const value = this.value.toLowerCase();
 
-        const title = card.querySelector("h3").textContent.toLowerCase();
+        cards.forEach(card => {
 
-        if(title.includes(value)){
-            card.style.display = "block";
-        }else{
-            card.style.display = "none";
-        }
+            const title = card.querySelector("h3").textContent.toLowerCase();
+
+            if (title.includes(value)) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+
+        });
+
+    });
+
+}
+
+// Category Button
+
+const buttons = document.querySelectorAll(".categories button");
+
+buttons.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        buttons.forEach(btn => btn.classList.remove("active"));
+
+        button.classList.add("active");
 
     });
 
 });
 
-
-// Category Button Animation
-
-const buttons = document.querySelectorAll(".categories button");
-
-buttons.forEach(button=>{
-
-button.addEventListener("click",()=>{
-
-buttons.forEach(btn=>btn.classList.remove("active"));
-
-button.classList.add("active");
-
-});
-
-});
-
-
 // Download Button
 
-const downloadButtons=document.querySelectorAll(".card a");
+const downloadButtons = document.querySelectorAll(".card button");
 
-downloadButtons.forEach(btn=>{
+downloadButtons.forEach(btn => {
 
-btn.addEventListener("click",function(e){
+    btn.addEventListener("click", () => {
 
-e.preventDefault();
+        alert("Download Feature Coming Soon 🚀");
 
-alert("Download Feature Coming Soon 🚀");
-
-});
+    });
 
 });
