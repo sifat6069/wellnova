@@ -1,275 +1,123 @@
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:'Poppins',sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
 }
 
 body{
-    background:#090d18;
-    color:#fff;
+background:#080b16;
+color:#fff;
 }
 
-/* Navbar */
-
-nav{
-    position:fixed;
-    top:0;
-    left:0;
-    width:100%;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 8%;
-    background:rgba(0,0,0,.55);
-    backdrop-filter:blur(12px);
-    z-index:999;
+header{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+padding:20px 60px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:rgba(0,0,0,.5);
+backdrop-filter:blur(10px);
+z-index:999;
 }
 
 .logo{
-    font-size:32px;
-    font-weight:bold;
-    color:#9b5cff;
+font-size:32px;
+font-weight:bold;
+color:#9b5cff;
+text-decoration:none;
 }
 
-nav ul{
-    display:flex;
-    list-style:none;
-    gap:30px;
+nav a{
+color:#fff;
+text-decoration:none;
+margin-left:25px;
 }
-
-nav ul li{
-    cursor:pointer;
-    transition:.3s;
-}
-
-nav ul li:hover{
-    color:#9b5cff;
-}
-
-/* Hero */
 
 .hero{
-    height:100vh;
 
-    background:url("assets/hero.jpg.png") center center/cover no-repeat;
+height:100vh;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
+background:
+linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+url("./assets/hero.jpg");
 
-.overlay{
-    width:100%;
-    height:100%;
-    background:rgba(0,0,0,.55);
+background-size:cover;
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    text-align:center;
-}
+background-position:center;
 
-.overlay h1{
-    font-size:70px;
-    margin-bottom:20px;
-}
+background-repeat:no-repeat;
 
-.overlay p{
-    font-size:22px;
-    margin-bottom:30px;
-    color:#ddd;
-}
-
-.overlay input{
-    width:90%;
-    max-width:600px;
-    padding:18px;
-
-    border:none;
-    outline:none;
-
-    border-radius:50px;
-
-    font-size:18px;
-}
-
-/* Categories */
-
-.category{
-
-    padding:60px 20px;
-
-    display:flex;
-    justify-content:center;
-    gap:15px;
-
-    flex-wrap:wrap;
-
-}
-
-.category button{
-
-    padding:13px 24px;
-
-    border:none;
-
-    border-radius:30px;
-
-    background:#8b5cf6;
-
-    color:white;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.category button:hover{
-
-    background:#6d28d9;
-
-    transform:translateY(-3px);
-
-}
-
-/* Wallpaper Grid */
-
-.grid{
-
-    width:90%;
-
-    margin:auto;
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-
-    gap:30px;
-
-    padding-bottom:80px;
-
-}
-
-.card{
-
-    background:#171b22;
-
-    border-radius:20px;
-
-    overflow:hidden;
-
-    transition:.35s;
-
-}
-
-.card:hover{
-
-    transform:translateY(-8px);
-
-    box-shadow:0 20px 50px rgba(139,92,246,.35);
-
-}
-
-.card img{
-
-    width:100%;
-
-    height:420px;
-
-    object-fit:cover;
-
-}
-
-.card h3{
-
-    padding:18px;
-
-    font-size:20px;
-
-}
-
-.card button{
-
-    width:calc(100% - 36px);
-
-    margin:0 18px 20px;
-
-    padding:15px;
-
-    border:none;
-
-    border-radius:12px;
-
-    background:#8b5cf6;
-
-    color:white;
-
-    cursor:pointer;
-
-    font-size:16px;
-
-    transition:.3s;
-
-}
-
-.card button:hover{
-
-    background:#6d28d9;
-
-}
-
-/* Footer */
-
-footer{
-
-    background:#111827;
-
-    text-align:center;
-
-    padding:30px;
-
-    color:#999;
-
-}
-
-/* Mobile */
-
-@media(max-width:768px){
-
-nav{
-
-flex-direction:column;
-
-padding:15px;
-
-}
-
-nav ul{
-
-gap:15px;
-
-flex-wrap:wrap;
+display:flex;
 
 justify-content:center;
 
+align-items:center;
+
+text-align:center;
+
+padding:20px;
+
 }
 
-.hero{
+.hero-content h1{
 
-height:80vh;
+font-size:65px;
+
+margin-bottom:20px;
 
 }
 
-.overlay h1{
+.hero-content p{
+
+font-size:22px;
+
+margin-bottom:30px;
+
+}
+
+.search-box input{
+
+width:600px;
+
+max-width:90%;
+
+padding:18px;
+
+border:none;
+
+border-radius:40px;
+
+font-size:18px;
+
+outline:none;
+
+}
+
+@media(max-width:768px){
+
+header{
+
+padding:15px 20px;
+
+}
+
+nav{
+
+display:none;
+
+}
+
+.hero-content h1{
 
 font-size:40px;
 
 }
 
-.overlay p{
+.hero-content p{
 
 font-size:18px;
 
