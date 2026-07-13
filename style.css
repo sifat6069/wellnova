@@ -17,12 +17,16 @@ position:fixed;
 top:0;
 left:0;
 width:100%;
-padding:20px 8%;
+height:80px;
+padding:0 8%;
+
 display:flex;
 justify-content:space-between;
 align-items:center;
-background:rgba(0,0,0,.35);
-backdrop-filter:blur(10px);
+
+background:rgba(0,0,0,.45);
+backdrop-filter:blur(12px);
+
 z-index:1000;
 }
 
