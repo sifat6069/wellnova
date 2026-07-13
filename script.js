@@ -17,13 +17,18 @@ import {
 const searchBox = document.getElementById("searchBox");
 
 if (searchBox) {
-  searchBox.addEventListener("keyup", function () {
-    const value = this.value.toLowerCase();
+  searchBox.addEventListener("input", () => {
+
+    const value = searchBox.value.toLowerCase();
 
     document.querySelectorAll(".card").forEach(card => {
+
       const title = card.querySelector("h3").textContent.toLowerCase();
-      card.style.display = title.includes(value) ? "block" : "none";
+
+      card.style.display = title.includes(value) ? "" : "none";
+
     });
+
   });
 }
 
