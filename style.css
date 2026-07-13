@@ -52,12 +52,17 @@ color:#9b5cff;
 /* HERO */
 
 .hero{
-    height:100vh;
-    margin-top:80px;
-    background:url("assets/hero.jpg") center center/cover no-repeat;
+    min-height:100vh;
+    padding-top:100px;
+
+    background:url("assets/hero.jpg") center center;
+    background-size:cover;
+    background-repeat:no-repeat;
+
     display:flex;
     justify-content:center;
     align-items:center;
+
     text-align:center;
     position:relative;
 }
