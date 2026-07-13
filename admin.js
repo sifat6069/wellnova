@@ -9,27 +9,28 @@ import {
   addDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-// khalidsaifullahsifat@gmail.com
-const ADMIN_EMAIL = "khalidsaifullahsifat@gmail.com";
+// =====================
+// Login Check
+// =====================
 
-// Admin Check
 onAuthStateChanged(auth, (user) => {
 
   if (!user) {
-    alert("Please login first.");
-    window.location.href = "index.html";
-    return;
-  }
 
-  if (user.email !== ADMIN_EMAIL) {
-    alert("Access Denied");
+    alert("Please login first.");
+
     window.location.href = "index.html";
+
     return;
+
   }
 
 });
 
-// Save Wallpaper
+// =====================
+// Add Wallpaper
+// =====================
+
 const saveBtn = document.getElementById("saveBtn");
 
 saveBtn.addEventListener("click", async () => {
@@ -39,17 +40,22 @@ saveBtn.addEventListener("click", async () => {
   const category = document.getElementById("category").value;
 
   if (!title || !image) {
+
     alert("Please fill all fields.");
+
     return;
+
   }
 
   try {
 
     await addDoc(collection(db, "wallpapers"), {
-      title,
-      image,
-      category,
+
+      title: title,
+      image: image,
+      category: category,
       createdAt: Date.now()
+
     });
 
     alert("✅ Wallpaper Added Successfully!");
@@ -61,6 +67,7 @@ saveBtn.addEventListener("click", async () => {
   } catch (err) {
 
     console.error(err);
+
     alert(err.message);
 
   }
