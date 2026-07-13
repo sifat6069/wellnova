@@ -1,10 +1,35 @@
-import { db } from "./firebase.js";
+import { auth, db } from "./firebase.js";
+
+import {
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
   collection,
   addDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
+// khalidsaifullahsifat@gmail.com
+const ADMIN_EMAIL = "khalidsaifullahsifat@gmail.com";
+
+// Admin Check
+onAuthStateChanged(auth, (user) => {
+
+  if (!user) {
+    alert("Please login first.");
+    window.location.href = "index.html";
+    return;
+  }
+
+  if (user.email !== ADMIN_EMAIL) {
+    alert("Access Denied");
+    window.location.href = "index.html";
+    return;
+  }
+
+});
+
+// Save Wallpaper
 const saveBtn = document.getElementById("saveBtn");
 
 saveBtn.addEventListener("click", async () => {
@@ -21,9 +46,9 @@ saveBtn.addEventListener("click", async () => {
   try {
 
     await addDoc(collection(db, "wallpapers"), {
-      title: title,
-      image: image,
-      category: category,
+      title,
+      image,
+      category,
       createdAt: Date.now()
     });
 
