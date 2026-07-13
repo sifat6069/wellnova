@@ -79,23 +79,38 @@ onAuthStateChanged(auth, (user) => {
 
 });
 
-// Load Wallpapers From Firestore
+// Load Wallpapers + Category Filter
 
-async function loadWallpapers() {
+let allWallpapers = [];
+
+async function loadWallpapers(category = "All") {
 
     const gallery = document.querySelector(".gallery");
-
     if (!gallery) return;
 
-    const snapshot = await getDocs(collection(db, "wallpapers"));
+    gallery.innerHTML = "";
 
-    snapshot.forEach((doc) => {
+    if (allWallpapers.length === 0) {
 
-        const data = doc.data();
+        const snapshot = await getDocs(collection(db, "wallpapers"));
+
+        snapshot.forEach((docSnap) => {
+            allWallpapers.push(docSnap.data());
+        });
+
+    }
+
+    let wallpapers = allWallpapers;
+
+    if (category !== "All") {
+        wallpapers = allWallpapers.filter(w => w.category === category);
+    }
+
+    wallpapers.forEach((data) => {
 
         gallery.innerHTML += `
         <div class="card">
-            <img src="${data.image}">
+            <img src="${data.image}" alt="${data.title}">
             <h3>${data.title}</h3>
             <button>Download</button>
         </div>
@@ -106,3 +121,13 @@ async function loadWallpapers() {
 }
 
 loadWallpapers();
+
+document.querySelectorAll(".categories button").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        loadWallpapers(btn.dataset.category);
+
+    });
+
+});
