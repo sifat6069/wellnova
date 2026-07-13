@@ -1,43 +1,43 @@
 import { db } from "./firebase.js";
 
 import {
-    collection,
-    addDoc
+  collection,
+  addDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 const saveBtn = document.getElementById("saveBtn");
 
 saveBtn.addEventListener("click", async () => {
 
-    const title = document.getElementById("title").value;
-    const image = document.getElementById("image").value;
-    const category = document.getElementById("category").value;
+  const title = document.getElementById("title").value.trim();
+  const image = document.getElementById("image").value.trim();
+  const category = document.getElementById("category").value;
 
-    if (title === "" || image === "") {
-        alert("সব তথ্য পূরণ করুন");
-        return;
-    }
+  if (!title || !image) {
+    alert("Please fill all fields.");
+    return;
+  }
 
-    try {
+  try {
 
-        await addDoc(collection(db, "wallpapers"), {
+    await addDoc(collection(db, "wallpapers"), {
+      title: title,
+      image: image,
+      category: category,
+      createdAt: Date.now()
+    });
 
-            title: title,
-            image: image,
-            category: category,
-            createdAt: Date.now()
+    alert("✅ Wallpaper Added Successfully!");
 
-        });
+    document.getElementById("title").value = "";
+    document.getElementById("image").value = "";
+    document.getElementById("category").selectedIndex = 0;
 
-        alert("Wallpaper Added Successfully ✅");
+  } catch (err) {
 
-        document.getElementById("title").value = "";
-        document.getElementById("image").value = "";
+    console.error(err);
+    alert(err.message);
 
-    } catch (err) {
-
-        alert(err.message);
-
-    }
+  }
 
 });
