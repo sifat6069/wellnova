@@ -215,3 +215,37 @@ grid-template-columns:1fr;
 }
 
 }
+
+/* ===== FIX SEARCH BOX ===== */
+
+.hero-content{
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#searchBox{
+    width: 700px !important;
+    max-width: 90% !important;
+    height: 60px !important;
+
+    padding: 0 25px !important;
+
+    border: none !important;
+    outline: none !important;
+
+    border-radius: 50px !important;
+
+    background: #ffffff !important;
+    color: #111111 !important;
+
+    font-size: 18px !important;
+
+    box-shadow: 0 10px 30px rgba(155,92,255,.35) !important;
+}
+
+#searchBox::placeholder{
+    color: #666;
+}
