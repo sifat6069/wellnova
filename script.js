@@ -202,3 +202,32 @@ if (searchBox) {
     });
 
 }
+
+// ===============================
+// Download Button
+// ===============================
+
+function setupDownloadButtons() {
+
+    document.querySelectorAll(".download-btn").forEach(btn => {
+
+        btn.onclick = () => {
+
+            const image = btn.dataset.image;
+
+            const link = document.createElement("a");
+
+            link.href = image;
+            link.download = "wallpaper.jpg";
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+
+        };
+
+    });
+
+}
