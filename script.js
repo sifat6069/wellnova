@@ -82,3 +82,123 @@ onAuthStateChanged(auth, (user) => {
   }
 
 });
+
+// ===============================
+// Wallpapers
+// ===============================
+
+let allWallpapers = [];
+
+async function loadWallpapers(category = "All") {
+
+    const gallery = document.getElementById("gallery");
+
+    if (!gallery) return;
+
+    gallery.innerHTML = "";
+
+    try {
+
+        const snapshot = await getDocs(collection(db, "wallpapers"));
+
+        allWallpapers = [];
+
+        snapshot.forEach((docSnap) => {
+
+            allWallpapers.push({
+                id: docSnap.id,
+                ...docSnap.data()
+            });
+
+        });
+
+        let wallpapers = allWallpapers;
+
+        if (category !== "All") {
+
+            wallpapers = allWallpapers.filter(
+                w => w.category === category
+            );
+
+        }
+
+        wallpapers.forEach((data) => {
+
+            gallery.innerHTML += `
+                <div class="card">
+
+                    <img src="${data.image}" alt="${data.title}">
+
+                    <h3>${data.title}</h3>
+
+                    <button
+                        class="download-btn"
+                        data-image="${data.image}">
+                        Download
+                    </button>
+
+                </div>
+            `;
+
+        });
+
+        setupDownloadButtons();
+
+    } catch (err) {
+
+        console.error(err);
+
+        gallery.innerHTML =
+        "<h2>Failed to load wallpapers.</h2>";
+
+    }
+
+}
+
+loadWallpapers();
+
+// ===============================
+// Category Filter
+// ===============================
+
+document.querySelectorAll(".categories button")
+.forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        loadWallpapers(btn.dataset.category);
+
+    });
+
+});
+
+// ===============================
+// Search
+// ===============================
+
+const searchBox = document.getElementById("searchBox");
+
+if (searchBox) {
+
+    searchBox.addEventListener("input", () => {
+
+        const value = searchBox.value.toLowerCase();
+
+        document.querySelectorAll(".card")
+        .forEach(card => {
+
+            const title =
+            card.querySelector("h3")
+            .textContent
+            .toLowerCase();
+
+            card.style.display =
+            title.includes(value)
+            ? ""
+            : "none";
+
+        });
+
+    });
+
+}
