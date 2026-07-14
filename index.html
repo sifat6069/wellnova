@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
 <meta charset="UTF-8">
@@ -17,6 +18,8 @@
 
 <body>
 
+<!-- ================= HEADER ================= -->
+
 <header>
 
 <div class="logo">
@@ -24,48 +27,73 @@ WallNova
 </div>
 
 <nav>
-    <a href="#">Home</a>
-    <a href="#">Categories</a>
-    <a href="#">Trending</a>
-    <a href="#">Latest</a>
-    <a href="#">About</a>
 
-    <img id="userPhoto" src="" style="width:40px;height:40px;border-radius:50%;display:none;">
+<a href="#">Home</a>
+<a href="#categories">Categories</a>
+<a href="#gallery">Wallpapers</a>
+<a href="admin.html">Admin</a>
 
-    <span id="userName"></span>
+<img
+id="userPhoto"
+src=""
+alt=""
+style="display:none;"
+>
 
-    <button id="loginBtn" onclick="googleLogin()">Login</button>
+<span id="userName"></span>
+
+<button id="loginBtn" onclick="googleLogin()">
+Login
+</button>
+
 </nav>
 
 </header>
 
+<!-- ================= HERO ================= -->
 
 <section class="hero">
 
-    <div class="overlay"></div>
+<div class="overlay"></div>
 
-    <div class="hero-content">
+<div class="hero-content">
 
-        <h1>
-            Discover Amazing <br>
-            Wallpapers
-        </h1>
+<h1>
 
-        <p>
-            Download Free HD & 4K Wallpapers
-        </p>
+Discover Amazing
 
-        <input
-            id="searchBox"
-            type="text"
-            placeholder="🔍 Search Wallpapers..."
-        >
+<br>
 
-    </div>
+Wallpapers
+
+</h1>
+
+<p>
+
+Download Free HD & 4K Wallpapers
+
+</p>
+
+<input
+
+id="searchBox"
+
+type="text"
+
+placeholder="🔍 Search Wallpapers..."
+
+>
+
+</div>
 
 </section>
 
-<section class="categories">
+<!-- ================= CATEGORY ================= -->
+
+<section
+class="categories"
+id="categories"
+>
 
 <button data-category="All">All</button>
 
@@ -75,18 +103,42 @@ WallNova
 
 <button data-category="Anime">Anime</button>
 
-<button data-category="AMOLED">AMOLED</button>
-
 <button data-category="Gaming">Gaming</button>
+
+<button data-category="AMOLED">AMOLED</button>
 
 <button data-category="Space">Space</button>
 
 </section>
 
+<!-- ================= GALLERY ================= -->
 
-<section class="gallery">
+<section
+
+class="gallery"
+
+id="gallery"
+
+>
+
+<!-- Firestore Wallpapers -->
+
 </section>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+<p>
+
+© 2026 WallNova • Made with ❤️ by Sifat
+
+</p>
+
+</footer>
+
 <script type="module" src="firebase.js"></script>
+
 <script type="module" src="script.js"></script>
 
 </body>
