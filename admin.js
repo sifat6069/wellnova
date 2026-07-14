@@ -1,59 +1,70 @@
 async function loadWallpapers() {
 
-  const list = document.getElementById("wallpaperList");
+  try {
 
-  if (!list) return;
+    const list = document.getElementById("wallpaperList");
 
-  list.innerHTML = "";
+    if (!list) return;
 
-  const snapshot = await getDocs(collection(db, "wallpapers"));
+    list.innerHTML = "";
 
-  snapshot.forEach((wallpaper) => {
+    const snapshot = await getDocs(collection(db, "wallpapers"));
 
-    const data = wallpaper.data();
+    if (snapshot.empty) {
+      list.innerHTML = "<p>No wallpapers found.</p>";
+      return;
+    }
 
-    const item = document.createElement("div");
+    snapshot.forEach((wallpaper) => {
 
-    item.style.display = "flex";
-    item.style.justifyContent = "space-between";
-    item.style.alignItems = "center";
-    item.style.background = "#222";
-    item.style.padding = "12px";
-    item.style.marginBottom = "10px";
-    item.style.borderRadius = "10px";
+      const data = wallpaper.data();
 
-    item.innerHTML = `
-      <span>${data.title}</span>
-      <button
-        style="
-          width:auto;
-          padding:8px 18px;
+      const item = document.createElement("div");
+
+      item.style.display = "flex";
+      item.style.justifyContent = "space-between";
+      item.style.alignItems = "center";
+      item.style.background = "#222";
+      item.style.padding = "12px";
+      item.style.marginBottom = "10px";
+      item.style.borderRadius = "10px";
+
+      item.innerHTML = `
+        <span>${data.title}</span>
+
+        <button style="
           background:red;
           color:white;
           border:none;
+          padding:8px 15px;
           border-radius:8px;
           cursor:pointer;
         ">
-        Delete
-      </button>
-    `;
+          Delete
+        </button>
+      `;
 
-    const btn = item.querySelector("button");
+      item.querySelector("button").onclick = async () => {
 
-    btn.addEventListener("click", async () => {
+        if (!confirm("Delete this wallpaper?")) return;
 
-      if (!confirm("Delete this wallpaper?")) return;
+        await deleteDoc(doc(db, "wallpapers", wallpaper.id));
 
-      await deleteDoc(doc(db, "wallpapers", wallpaper.id));
+        alert("Wallpaper Deleted");
 
-      alert("Wallpaper Deleted");
+        loadWallpapers();
 
-      loadWallpapers();
+      };
+
+      list.appendChild(item);
 
     });
 
-    list.appendChild(item);
+  } catch (err) {
 
-  });
+    alert("Firestore Error:\n" + err.message);
+    console.error(err);
+
+  }
 
 }
