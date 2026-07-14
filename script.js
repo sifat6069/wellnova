@@ -9,9 +9,9 @@ import {
 import {
   collection,
   getDocs,
+  getDoc,
   doc,
   setDoc,
-  addDoc,
   deleteDoc,
   query,
   where,
