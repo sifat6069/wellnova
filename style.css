@@ -1,16 +1,26 @@
+/* ===========================
+   RESET
+=========================== */
+
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Poppins',sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 body{
-background:#090b14;
-color:#fff;
+    background:#090b14;
+    color:#fff;
 }
 
-/* HEADER */
+/* ===========================
+   HEADER
+=========================== */
 
 header{
     position:fixed;
@@ -23,244 +33,269 @@ header{
     justify-content:space-between;
     align-items:center;
     background:rgba(0,0,0,.45);
-    backdrop-filter:blur(10px);
-    box-shadow:0 5px 25px rgba(0,0,0,.35);
+    backdrop-filter:blur(12px);
     z-index:1000;
 }
 
 .logo{
-font-size:34px;
-font-weight:800;
-color:#9b5cff;
+    font-size:32px;
+    font-weight:800;
+    color:#9b5cff;
 }
 
 nav{
-display:flex;
-gap:30px;
+    display:flex;
+    align-items:center;
+    gap:20px;
 }
 
 nav a{
-color:#fff;
-text-decoration:none;
-font-size:15px;
-font-weight:600;
-transition:.3s;
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+    transition:.3s;
 }
 
 nav a:hover{
-color:#9b5cff;
+    color:#9b5cff;
 }
 
-/* HERO */
+#loginBtn{
+    padding:10px 20px;
+    background:#8b5cf6;
+    color:white;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+}
+
+#loginBtn:hover{
+    background:#a855f7;
+}
+
+#userPhoto{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+}
+
+/* ===========================
+   HERO
+=========================== */
 
 .hero{
+
     min-height:100vh;
+
+    background:
+    linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.55)),
+    url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=2000");
+
+    background-size:cover;
+    background-position:center;
 
     display:flex;
     justify-content:center;
     align-items:center;
-
     text-align:center;
 
-    position:relative;
-
-    background:url("assets/hero.jpg") no-repeat center center;
-    background-size:cover;
+    padding:100px 20px;
 }
 
-.overlay{
-position:absolute;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.55);
+.hero-content h1{
+    font-size:70px;
+    font-weight:800;
 }
 
-.hero-content{
-    position:relative;
-    z-index:2;
-
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-
-    max-width:900px;
-
-    padding-top:80px;
-}
-
-.hero h1{
-font-size:72px;
-font-weight:800;
-line-height:1.1;
-margin-bottom:20px;
-}
-
-.hero p{
-font-size:22px;
-color:#ddd;
-margin-bottom:35px;
+.hero-content p{
+    margin-top:20px;
+    font-size:22px;
+    color:#ddd;
 }
 
 #searchBox{
-width:650px;
-max-width:90%;
-padding:18px 25px;
-font-size:18px;
-border:none;
-outline:none;
-border-radius:50px;
-background:white;
-color:#111;
-box-shadow:0 10px 40px rgba(155,92,255,.35);
+
+    width:700px;
+    max-width:90%;
+
+    margin-top:40px;
+
+    padding:18px 25px;
+
+    border:none;
+    border-radius:50px;
+
+    font-size:18px;
+
+    outline:none;
 }
 
-/* CATEGORY */
+/* ===========================
+   CATEGORY
+=========================== */
 
 .categories{
-display:flex;
-justify-content:center;
-gap:15px;
-flex-wrap:wrap;
-padding:30px 20px;
-margin-top:-20px;
-position:relative;
-z-index:5;
+
+    display:flex;
+    justify-content:center;
+    gap:15px;
+
+    flex-wrap:wrap;
+
+    padding:50px 20px;
+
 }
 
 .categories button{
-padding:13px 28px;
-border:none;
-border-radius:40px;
-background:#8b5cf6;
-color:#fff;
-font-weight:600;
-cursor:pointer;
-transition:.3s;
+
+    padding:12px 25px;
+
+    border:none;
+
+    border-radius:30px;
+
+    background:#8b5cf6;
+
+    color:white;
+
+    cursor:pointer;
+
 }
 
 .categories button:hover{
-background:#a855f7;
-transform:translateY(-4px);
+
+    background:#a855f7;
+
 }
 
-/* GALLERY */
+/* ===========================
+   GALLERY
+=========================== */
 
 .gallery{
-width:90%;
-margin:40px auto 80px;
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:25px;
+
+    width:90%;
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+
+    gap:25px;
+
+    padding-bottom:80px;
+
 }
 
 .card{
-background:#141726;
-border-radius:18px;
-overflow:hidden;
-transition:.35s;
+
+    background:#141726;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    transition:.35s;
+
 }
 
 .card:hover{
-transform:translateY(-8px);
-box-shadow:0 15px 40px rgba(155,92,255,.35);
+
+    transform:translateY(-8px);
+
 }
 
 .card img{
-width:100%;
-height:360px;
-object-fit:cover;
-display:block;
+
+    width:100%;
+
+    height:350px;
+
+    object-fit:cover;
+
 }
 
 .card h3{
-padding:18px;
-font-size:22px;
+
+    padding:18px;
+
 }
 
 .card button{
-margin:0 18px 20px;
-width:calc(100% - 36px);
-padding:14px;
-border:none;
-border-radius:12px;
-background:#8b5cf6;
-color:white;
-font-size:16px;
-font-weight:600;
-cursor:pointer;
-transition:.3s;
+
+    width:calc(100% - 36px);
+
+    margin:0 18px 20px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#8b5cf6;
+
+    color:white;
+
+    cursor:pointer;
+
 }
 
 .card button:hover{
-background:#a855f7;
+
+    background:#a855f7;
+
 }
 
-/* MOBILE */
+/* ===========================
+   FOOTER
+=========================== */
+
+footer{
+
+    text-align:center;
+
+    padding:40px;
+
+    color:#999;
+
+}
+
+/* ===========================
+   MOBILE
+=========================== */
 
 @media(max-width:768px){
 
 header{
-padding:18px;
-}
 
-.logo{
-font-size:28px;
-}
-
-nav{
-display:none;
-}
-
-.hero h1{
-font-size:40px;
-}
-
-.hero p{
-font-size:18px;
-}
-
-#searchBox{
-width:90%;
-font-size:16px;
-padding:16px 22px;
-}
-
-.gallery{
-grid-template-columns:1fr;
-}
+    padding:0 20px;
 
 }
 
-/* ===== FIX SEARCH BOX ===== */
+nav a{
 
-.hero-content{
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display:none;
+
+}
+
+.hero-content h1{
+
+    font-size:42px;
+
+}
+
+.hero-content p{
+
+    font-size:18px;
+
 }
 
 #searchBox{
-    width: 700px !important;
-    max-width: 90% !important;
-    height: 60px !important;
 
-    padding: 0 25px !important;
+    width:100%;
 
-    border: none !important;
-    outline: none !important;
-
-    border-radius: 50px !important;
-
-    background: #ffffff !important;
-    color: #111111 !important;
-
-    font-size: 18px !important;
-
-    box-shadow: 0 10px 30px rgba(155,92,255,.35) !important;
 }
 
-#searchBox::placeholder{
-    color: #666;
 }
