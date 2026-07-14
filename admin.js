@@ -1,7 +1,8 @@
 import { auth, db } from "./firebase.js";
 
 import {
-  onAuthStateChanged
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
 
 import {
@@ -12,32 +13,50 @@ import {
   doc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-console.log("✅ admin.js loaded");
+// ===============================
+// ADMIN EMAIL
+// ===============================
 
-// Login Check
-onAuthStateChanged(auth, (user) => {
-  console.log("User:", user);
+const ADMIN_EMAIL = "khalidsaifullahsifat@gmail.com";
+
+// ===============================
+// ADMIN LOGIN CHECK
+// ===============================
+
+onAuthStateChanged(auth, async (user) => {
 
   if (!user) {
     alert("Please login first.");
     window.location.href = "index.html";
+    return;
   }
+
+  if (user.email !== ADMIN_EMAIL) {
+
+    alert("❌ Access Denied!");
+
+    await signOut(auth);
+
+    window.location.href = "index.html";
+
+    return;
+  }
+
+  loadWallpapers();
+
 });
 
-// Add Wallpaper
+// ===============================
+// ADD WALLPAPER
+// ===============================
+
 const saveBtn = document.getElementById("saveBtn");
 
-console.log("Save Button:", saveBtn);
-
 saveBtn.addEventListener("click", async () => {
-
-  console.log("🔥 Button Clicked");
 
   const title = document.getElementById("title").value.trim();
   const image = document.getElementById("image").value.trim();
   const category = document.getElementById("category").value;
-
-  console.log(title, image, category);
 
   if (!title || !image) {
     alert("Please fill all fields.");
@@ -46,8 +65,6 @@ saveBtn.addEventListener("click", async () => {
 
   try {
 
-    console.log("Saving...");
-
     await addDoc(collection(db, "wallpapers"), {
       title,
       image,
@@ -55,24 +72,26 @@ saveBtn.addEventListener("click", async () => {
       createdAt: Date.now()
     });
 
-    console.log("Saved!");
-
-    alert("Wallpaper Added Successfully!");
+    alert("✅ Wallpaper Added Successfully!");
 
     document.getElementById("title").value = "";
     document.getElementById("image").value = "";
+    document.getElementById("category").selectedIndex = 0;
 
     loadWallpapers();
 
   } catch (err) {
 
     console.error(err);
-
     alert(err.message);
 
   }
 
 });
+
+// ===============================
+// LOAD WALLPAPERS
+// ===============================
 
 async function loadWallpapers() {
 
@@ -86,36 +105,67 @@ async function loadWallpapers() {
 
     const snapshot = await getDocs(collection(db, "wallpapers"));
 
+    if (snapshot.empty) {
+      list.innerHTML = "<p>No wallpapers found.</p>";
+      return;
+    }
+
     snapshot.forEach((wallpaper) => {
 
       const data = wallpaper.data();
 
       const item = document.createElement("div");
 
-      item.innerHTML = `
-        <div style="
-        display:flex;
-        justify-content:space-between;
-        background:#222;
-        padding:10px;
-        margin-top:10px;
-        border-radius:10px;
-        ">
-          <span>${data.title}</span>
+      item.style.display = "flex";
+      item.style.justifyContent = "space-between";
+      item.style.alignItems = "center";
+      item.style.background = "#222";
+      item.style.padding = "12px";
+      item.style.marginTop = "10px";
+      item.style.borderRadius = "10px";
 
-          <button style="background:red;color:white;border:none;padding:8px;">
-          Delete
-          </button>
+      item.innerHTML = `
+        <div>
+          <strong>${data.title}</strong><br>
+          <small>${data.category}</small>
         </div>
+
+        <button style="
+          background:#ff3b30;
+          color:white;
+          border:none;
+          padding:8px 18px;
+          border-radius:8px;
+          cursor:pointer;
+        ">
+          Delete
+        </button>
       `;
 
-      item.querySelector("button").onclick = async () => {
+      const deleteBtn = item.querySelector("button");
 
-        await deleteDoc(doc(db, "wallpapers", wallpaper.id));
+      deleteBtn.addEventListener("click", async () => {
 
-        loadWallpapers();
+        const ok = confirm("Delete this wallpaper?");
 
-      };
+        if (!ok) return;
+
+        try {
+
+          await deleteDoc(doc(db, "wallpapers", wallpaper.id));
+
+          alert("🗑 Wallpaper Deleted");
+
+          loadWallpapers();
+
+        } catch (err) {
+
+          console.error(err);
+          alert(err.message);
+
+        }
+
+      });
 
       list.appendChild(item);
 
@@ -125,8 +175,12 @@ async function loadWallpapers() {
 
     console.error(err);
 
+    list.innerHTML = `
+      <p style="color:red;">
+        Failed to load wallpapers.
+      </p>
+    `;
+
   }
 
 }
-
-loadWallpapers();
