@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>WallNova Admin</title>
 
 <link rel="stylesheet" href="style.css">
 
 <style>
+
 body{
     background:#090b14;
     color:white;
@@ -34,6 +37,10 @@ body{
     margin-bottom:15px;
     border:none;
     border-radius:10px;
+    background:#2a2a2a;
+    color:white;
+    font-size:16px;
+    box-sizing:border-box;
 }
 
 .admin button{
@@ -45,39 +52,67 @@ body{
     border-radius:10px;
     cursor:pointer;
     font-size:18px;
+    transition:.3s;
 }
+
+.admin button:hover{
+    background:#7c3aed;
+}
+
+#wallpaperList{
+    margin-top:20px;
+}
+
 </style>
 
 </head>
+
 <body>
 
 <div class="admin">
 
 <h1>WallNova Admin Panel</h1>
 
-<input id="title" placeholder="Wallpaper Title">
+<input
+id="title"
+type="text"
+placeholder="Wallpaper Title">
 
-<input id="image" placeholder="Image URL">
+<input
+id="image"
+type="text"
+placeholder="Image URL">
 
 <select id="category">
-<option>Nature</option>
-<option>Cars</option>
-<option>Anime</option>
-<option>Gaming</option>
-<option>AMOLED</option>
-<option>Space</option>
+
+<option value="Nature">Nature</option>
+
+<option value="Cars">Cars</option>
+
+<option value="Anime">Anime</option>
+
+<option value="Gaming">Gaming</option>
+
+<option value="AMOLED">AMOLED</option>
+
+<option value="Space">Space</option>
+
 </select>
 
 <button id="saveBtn">
 Add Wallpaper
 </button>
-    
-<hr style="margin:30px 0;">
+
+<hr style="margin:35px 0;">
 
 <h2>All Wallpapers</h2>
 
-<div id="wallpaperList"></div>
-    
+<div id="wallpaperList">
+
+<!-- Wallpapers will appear here -->
+
+</div>
+
 </div>
 
 <script type="module" src="admin.js"></script>
