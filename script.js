@@ -10,81 +10,97 @@ import {
   collection,
   getDocs,
   doc,
-  setDoc
+  setDoc,
+  addDoc,
+  deleteDoc,
+  query,
+  where,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
 // ===============================
-// Google Login
+// GOOGLE LOGIN
 // ===============================
 
 window.googleLogin = async () => {
 
-  try { 
+    try{
 
-    const result = await signInWithPopup(auth, provider);
+        const result = await signInWithPopup(auth, provider);
 
-    const user = result.user;
+        const user = result.user;
 
-    await setDoc(doc(db, "users", user.uid), {
-      uid: user.uid,
-      name: user.displayName,
-      email: user.email,
-      photo: user.photoURL
-    });
+        await setDoc(doc(db,"users",user.uid),{
 
-  } catch (err) {
+            uid:user.uid,
+            name:user.displayName,
+            email:user.email,
+            photo:user.photoURL
 
-    console.error(err);
-    alert(err.message);
+        },{merge:true});
 
-  }
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        alert(err.message);
+
+    }
 
 };
 
 // ===============================
-// Login State
+// LOGIN STATE
 // ===============================
 
-onAuthStateChanged(auth, (user) => {
+let currentUser = null;
 
-  const btn = document.getElementById("loginBtn");
-  const name = document.getElementById("userName");
-  const photo = document.getElementById("userPhoto");
+onAuthStateChanged(auth,(user)=>{
 
-  if (!btn) return;
+    currentUser=user;
 
-  if (user) {
+    const btn=document.getElementById("loginBtn");
+    const name=document.getElementById("userName");
+    const photo=document.getElementById("userPhoto");
 
-    name.textContent = user.displayName;
+    if(!btn) return;
 
-    photo.src = user.photoURL;
+    if(user){
 
-    photo.style.display = "block";
+        name.textContent=user.displayName;
 
-    btn.textContent = "Logout";
+        photo.src=user.photoURL;
 
-    btn.onclick = async () => {
+        photo.style.display="block";
 
-      await signOut(auth);
+        btn.textContent="Logout";
 
-    };
+        btn.onclick=async()=>{
 
-  } else {
+            await signOut(auth);
 
-    name.textContent = "";
+        };
 
-    photo.style.display = "none";
+    }
 
-    btn.textContent = "Login";
+    else{
 
-    btn.onclick = googleLogin;
+        name.textContent="";
 
-  }
+        photo.style.display="none";
+
+        btn.textContent="Login";
+
+        btn.onclick=googleLogin;
+
+    }
 
 });
 
 // ===============================
-// Wallpapers
+// WALLPAPERS
 // ===============================
 
 let allWallpapers = [];
@@ -95,7 +111,11 @@ async function loadWallpapers(category = "All") {
 
     if (!gallery) return;
 
-    gallery.innerHTML = "";
+    gallery.innerHTML = `
+        <h2 style="text-align:center;padding:40px;">
+            Loading Wallpapers...
+        </h2>
+    `;
 
     try {
 
@@ -106,8 +126,11 @@ async function loadWallpapers(category = "All") {
         snapshot.forEach((docSnap) => {
 
             allWallpapers.push({
+
                 id: docSnap.id,
+
                 ...docSnap.data()
+
             });
 
         });
@@ -116,40 +139,71 @@ async function loadWallpapers(category = "All") {
 
         if (category !== "All") {
 
-            wallpapers = allWallpapers.filter(
+            wallpapers = wallpapers.filter(
                 w => w.category === category
             );
 
         }
 
+        gallery.innerHTML = "";
+
         wallpapers.forEach((data) => {
 
             gallery.innerHTML += `
-                <div class="card">
 
-                    <img src="${data.image}" alt="${data.title}">
+            <div class="card">
+
+                <img src="${data.image}" alt="${data.title}">
+
+                <div class="card-body">
 
                     <h3>${data.title}</h3>
 
-                    <button
-                        class="download-btn"
-                        data-image="${data.image}">
-                        Download
-                    </button>
+                    <p>${data.category}</p>
+
+                    <div class="card-buttons">
+
+                        <button
+                            class="like-btn"
+                            data-id="${data.id}">
+                            ❤️ Like
+                        </button>
+
+                        <button
+                            class="download-btn"
+                            data-image="${data.image}">
+                            ⬇ Download
+                        </button>
+
+                    </div>
 
                 </div>
+
+            </div>
+
             `;
 
         });
 
         setupDownloadButtons();
 
-    } catch (err) {
+        setupLikeButtons();
 
-        console.error(err);
+    }
 
-        gallery.innerHTML =
-        "<h2>Failed to load wallpapers.</h2>";
+    catch(err){
+
+        console.log(err);
+
+        gallery.innerHTML=`
+
+        <h2 style="text-align:center;color:red;padding:40px;">
+
+        Failed to load wallpapers.
+
+        </h2>
+
+        `;
 
     }
 
@@ -158,53 +212,91 @@ async function loadWallpapers(category = "All") {
 loadWallpapers();
 
 // ===============================
-// Category Filter
+// CATEGORY FILTER
 // ===============================
 
-document.querySelectorAll(".categories button")
-.forEach(btn => {
+document.querySelectorAll(".categories button").forEach(btn=>{
 
-    btn.addEventListener("click", () => {
+    btn.onclick=()=>{
 
         loadWallpapers(btn.dataset.category);
 
-    });
+    };
 
 });
 
 // ===============================
-// Search
+// SEARCH
 // ===============================
 
-const searchBox = document.getElementById("searchBox");
+const searchBox=document.getElementById("searchBox");
 
-if (searchBox) {
+if(searchBox){
 
-    searchBox.addEventListener("input", () => {
+searchBox.addEventListener("input",()=>{
 
-        const value = searchBox.value.toLowerCase();
+const value=searchBox.value.toLowerCase();
 
-        document.querySelectorAll(".card")
-        .forEach(card => {
+document.querySelectorAll(".card").forEach(card=>{
 
-            const title =
-            card.querySelector("h3")
-            .textContent
-            .toLowerCase();
+const title=card.querySelector("h3").textContent.toLowerCase();
 
-            card.style.display =
-            title.includes(value)
-            ? ""
-            : "none";
+card.style.display=title.includes(value)?"":"none";
 
-        });
+});
+
+});
+
+}
+
+// ===============================
+// LIKE SYSTEM
+// ===============================
+
+async function setupLikeButtons() {
+
+    document.querySelectorAll(".like-btn").forEach(btn => {
+
+        btn.onclick = async () => {
+
+            if (!currentUser) {
+
+                alert("Please login first.");
+
+                return;
+
+            }
+
+            btn.innerHTML = "❤️ Liked";
+
+            btn.disabled = true;
+
+            try {
+
+                await addDoc(collection(db, "likes"), {
+
+                    wallpaperId: btn.dataset.id,
+
+                    userId: currentUser.uid,
+
+                    createdAt: serverTimestamp()
+
+                });
+
+            } catch (err) {
+
+                console.log(err);
+
+            }
+
+        };
 
     });
 
 }
 
 // ===============================
-// Download Button
+// DOWNLOAD BUTTON
 // ===============================
 
 function setupDownloadButtons() {
@@ -218,6 +310,7 @@ function setupDownloadButtons() {
             const link = document.createElement("a");
 
             link.href = image;
+
             link.download = "wallpaper.jpg";
 
             document.body.appendChild(link);
@@ -231,3 +324,4 @@ function setupDownloadButtons() {
     });
 
 }
+
