@@ -19,7 +19,7 @@ import {
 
 window.googleLogin = async () => {
 
-  try {
+  try { 
 
     const result = await signInWithPopup(auth, provider);
 
