@@ -65,7 +65,7 @@ image:"https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200"
 title:"Ocean Waves",
 category:"Nature",
 image:"https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=1200"
-}
+},
 
 {
 title:"Misty Forest",
