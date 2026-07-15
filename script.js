@@ -1,223 +1,84 @@
-import { auth, provider, db } from "./firebase.js";
-
-import {
-  signInWithPopup,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
-
-import {
-  collection,
-  getDocs,
-  getDoc,
-  doc,
-  setDoc,
-  deleteDoc,
-  query,
-  where,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
-
 // ===============================
-// GOOGLE LOGIN
+// PEXELS API
 // ===============================
 
-window.googleLogin = async () => {
+const API_KEY = "oeCD73YhbmBgbuMliS2AV6LpVkmqTqd0X37oLyftyros7wAJfl7CCrgl";
 
-    try{
+const gallery = document.querySelector(".gallery");
 
-        const result = await signInWithPopup(auth, provider);
-
-        const user = result.user;
-
-        await setDoc(doc(db,"users",user.uid),{
-
-            uid:user.uid,
-            name:user.displayName,
-            email:user.email,
-            photo:user.photoURL
-
-        },{merge:true});
-
-    }
-
-    catch(err){
-
-        console.log(err);
-
-        alert(err.message);
-
-    }
-
-};
+let currentPage = 1;
+let currentCategory = "Nature";
 
 // ===============================
-// LOGIN STATE
+// LOAD WALLPAPERS
 // ===============================
 
-let currentUser = null;
+async function loadWallpapers(category = "Nature", page = 1) {
 
-onAuthStateChanged(auth,(user)=>{
+    currentCategory = category;
 
-    currentUser=user;
+    const url =
+`https://api.pexels.com/v1/search?query=${category}&per_page=24&page=${page}`;
 
-    const btn=document.getElementById("loginBtn");
-    const name=document.getElementById("userName");
-    const photo=document.getElementById("userPhoto");
+    const res = await fetch(url, {
 
-    if(!btn) return;
+        headers: {
 
-    if(user){
-
-        name.textContent=user.displayName;
-
-        photo.src=user.photoURL;
-
-        photo.style.display="block";
-
-        btn.textContent="Logout";
-
-        btn.onclick=async()=>{
-
-            await signOut(auth);
-
-        };
-
-    }
-
-    else{
-
-        name.textContent="";
-
-        photo.style.display="none";
-
-        btn.textContent="Login";
-
-        btn.onclick=googleLogin;
-
-    }
-
-});
-
-// ===============================
-// WALLPAPERS
-// ===============================
-
-let allWallpapers = [];
-
-async function loadWallpapers(category = "All") {
-
-    const gallery = document.getElementById("gallery");
-
-    if (!gallery) return;
-
-    gallery.innerHTML = `
-        <h2 style="text-align:center;padding:40px;">
-            Loading Wallpapers...
-        </h2>
-    `;
-
-    try {
-
-        const snapshot = await getDocs(collection(db, "wallpapers"));
-
-        allWallpapers = [];
-
-        snapshot.forEach((docSnap) => {
-
-            allWallpapers.push({
-
-                id: docSnap.id,
-
-                ...docSnap.data()
-
-            });
-
-        });
-
-        let wallpapers = allWallpapers;
-
-        if (category !== "All") {
-
-            wallpapers = wallpapers.filter(
-                w => w.category === category
-            );
+            Authorization: API_KEY
 
         }
 
+    });
+
+    const data = await res.json();
+
+    if(page === 1){
+
         gallery.innerHTML = "";
-
-        wallpapers.forEach((data) => {
-
-            gallery.innerHTML += `
-
-            <div class="card">
-
-                <img src="${data.image}" alt="${data.title}">
-
-                <div class="card-body">
-
-                    <h3>${data.title}</h3>
-
-                    <p>${data.category}</p>
-
-                    <div class="card-buttons">
-
-                        <button
-                            class="like-btn"
-                            data-id="${data.id}">
-                            ❤️ Like
-                        </button>
-
-                        <button
-                            class="download-btn"
-                            data-image="${data.image}">
-                            ⬇ Download
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-            `;
-
-        });
-
-        setupDownloadButtons();
-
-        setupLikeButtons();
 
     }
 
-    catch(err){
+    data.photos.forEach(photo=>{
 
-        console.log(err);
+        gallery.innerHTML += `
 
-        gallery.innerHTML=`
+        <div class="card">
 
-        <h2 style="text-align:center;color:red;padding:40px;">
+            <img src="${photo.src.large2x}" alt="${photo.photographer}">
 
-        Failed to load wallpapers.
+            <h3>${photo.photographer}</h3>
 
-        </h2>
+            <button onclick="downloadImage('${photo.src.original}')">
+                Download
+            </button>
+
+        </div>
 
         `;
 
-    }
+    });
 
 }
 
-loadWallpapers();
+// ===============================
+// DOWNLOAD
+// ===============================
+
+window.downloadImage = function(url){
+
+    window.open(url,"_blank");
+
+}
 
 // ===============================
-// CATEGORY FILTER
+// CATEGORY BUTTONS
 // ===============================
 
 document.querySelectorAll(".categories button").forEach(btn=>{
 
-    btn.onclick=()=>{
+    btn.onclick = ()=>{
+
+        currentPage = 1;
 
         loadWallpapers(btn.dataset.category);
 
@@ -226,102 +87,7 @@ document.querySelectorAll(".categories button").forEach(btn=>{
 });
 
 // ===============================
-// SEARCH
+// FIRST LOAD
 // ===============================
 
-const searchBox=document.getElementById("searchBox");
-
-if(searchBox){
-
-searchBox.addEventListener("input",()=>{
-
-const value=searchBox.value.toLowerCase();
-
-document.querySelectorAll(".card").forEach(card=>{
-
-const title=card.querySelector("h3").textContent.toLowerCase();
-
-card.style.display=title.includes(value)?"":"none";
-
-});
-
-});
-
-}
-
-// ===============================
-// LIKE SYSTEM
-// ===============================
-
-async function setupLikeButtons() {
-
-    document.querySelectorAll(".like-btn").forEach(btn => {
-
-        btn.onclick = async () => {
-
-            if (!currentUser) {
-
-                alert("Please login first.");
-
-                return;
-
-            }
-
-            btn.innerHTML = "❤️ Liked";
-
-            btn.disabled = true;
-
-            try {
-
-                await addDoc(collection(db, "likes"), {
-
-                    wallpaperId: btn.dataset.id,
-
-                    userId: currentUser.uid,
-
-                    createdAt: serverTimestamp()
-
-                });
-
-            } catch (err) {
-
-                console.log(err);
-
-            }
-
-        };
-
-    });
-
-}
-
-// ===============================
-// DOWNLOAD BUTTON
-// ===============================
-
-function setupDownloadButtons() {
-
-    document.querySelectorAll(".download-btn").forEach(btn => {
-
-        btn.onclick = () => {
-
-            const image = btn.dataset.image;
-
-            const link = document.createElement("a");
-
-            link.href = image;
-
-            link.download = "wallpaper.jpg";
-
-            document.body.appendChild(link);
-
-            link.click();
-
-            document.body.removeChild(link);
-
-        };
-
-    });
-
-}
-
+loadWallpapers("Nature");
