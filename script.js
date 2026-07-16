@@ -1,3 +1,4 @@
+console.log("script.js loaded");
 // ================================
 // WallNova v2.0
 // Pexels API
@@ -43,6 +44,7 @@ async function loadWallpapers(category = "Nature", page = 1) {
         );
 
         const data = await response.json();
+        console.log(data);
 
         if (page === 1) {
 
