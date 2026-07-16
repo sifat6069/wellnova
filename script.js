@@ -43,7 +43,12 @@ async function loadWallpapers(category = "Nature", page = 1) {
 
         );
 
+        console.log(response.status);
+
         const data = await response.json();
+
+        console.log(data);
+        
         console.log(data);
 
         if (page === 1) {
