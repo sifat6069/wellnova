@@ -1,93 +1,193 @@
-// ===============================
-// PEXELS API
-// ===============================
+// ================================
+// WallNova v2.0
+// Pexels API
+// ================================
 
-const API_KEY = "oeCD73YhbmBgbuMliS2AV6LpVkmqTqd0X37oLyftyros7wAJfl7CCrgl";
+const API_KEY = "YOUR_PEXELS_API_KEY";
 
 const gallery = document.querySelector(".gallery");
+const searchBox = document.getElementById("searchBox");
 
-let currentPage = 1;
 let currentCategory = "Nature";
+let currentPage = 1;
+let loading = false;
 
-// ===============================
-// LOAD WALLPAPERS
-// ===============================
+// ================================
+// Load Wallpapers
+// ================================
 
 async function loadWallpapers(category = "Nature", page = 1) {
 
-    currentCategory = category;
+    if (loading) return;
 
-    const url =
-`https://api.pexels.com/v1/search?query=${category}&per_page=24&page=${page}`;
+    loading = true;
 
-    const res = await fetch(url, {
+    document.getElementById("loading").style.display = "block";
 
-        headers: {
+    try {
 
-            Authorization: API_KEY
+        const response = await fetch(
+
+            `https://api.pexels.com/v1/search?query=${category}&per_page=24&page=${page}`,
+
+            {
+
+                headers: {
+
+                    Authorization: API_KEY
+
+                }
+
+            }
+
+        );
+
+        const data = await response.json();
+
+        if (page === 1) {
+
+            gallery.innerHTML = "";
 
         }
 
-    });
+        data.photos.forEach(photo => {
 
-    const data = await res.json();
+            gallery.innerHTML += `
 
-    if(page === 1){
+            <div class="card">
 
-        gallery.innerHTML = "";
+                <img src="${photo.src.large2x}" alt="${photo.alt}">
+
+                <h3>${photo.photographer}</h3>
+
+                <button onclick="downloadWallpaper('${photo.src.original}')">
+
+                Download
+
+                </button>
+
+            </div>
+
+            `;
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
 
     }
 
-    data.photos.forEach(photo=>{
+    document.getElementById("loading").style.display = "none";
 
-        gallery.innerHTML += `
-
-        <div class="card">
-
-            <img src="${photo.src.large2x}" alt="${photo.photographer}">
-
-            <h3>${photo.photographer}</h3>
-
-            <button onclick="downloadImage('${photo.src.original}')">
-                Download
-            </button>
-
-        </div>
-
-        `;
-
-    });
+    loading = false;
 
 }
 
-// ===============================
-// DOWNLOAD
-// ===============================
+// ================================
+// Download
+// ================================
 
-window.downloadImage = function(url){
+window.downloadWallpaper = function(url){
 
     window.open(url,"_blank");
 
-}
+};
 
-// ===============================
+// ================================
+// First Load
+// ================================
+
+loadWallpapers();
+
+// ===================================
 // CATEGORY BUTTONS
-// ===============================
+// ===================================
 
-document.querySelectorAll(".categories button").forEach(btn=>{
+document.querySelectorAll(".categories button").forEach(button => {
 
-    btn.onclick = ()=>{
+    button.addEventListener("click", () => {
+
+        currentCategory = button.dataset.category;
 
         currentPage = 1;
 
-        loadWallpapers(btn.dataset.category);
+        loadWallpapers(currentCategory, currentPage);
 
-    };
+    });
 
 });
 
-// ===============================
-// FIRST LOAD
-// ===============================
+// ===================================
+// SEARCH
+// ===================================
 
-loadWallpapers("Nature");
+searchBox.addEventListener("keypress", (e) => {
+
+    if (e.key === "Enter") {
+
+        currentCategory = searchBox.value.trim();
+
+        currentPage = 1;
+
+        loadWallpapers(currentCategory, currentPage);
+
+    }
+
+});
+
+// ===================================
+// INFINITE SCROLL
+// ===================================
+
+window.addEventListener("scroll", () => {
+
+    if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 300
+    ) {
+
+        currentPage++;
+
+        loadWallpapers(currentCategory, currentPage);
+
+    }
+
+});
+
+// ======================================
+// FULL SCREEN IMAGE
+// ======================================
+
+window.previewWallpaper = function(url){
+
+    const preview = document.createElement("div");
+
+    preview.style.position="fixed";
+    preview.style.left="0";
+    preview.style.top="0";
+    preview.style.width="100%";
+    preview.style.height="100%";
+    preview.style.background="rgba(0,0,0,.95)";
+    preview.style.display="flex";
+    preview.style.alignItems="center";
+    preview.style.justifyContent="center";
+    preview.style.zIndex="99999";
+
+    preview.innerHTML=`
+
+        <img
+        src="${url}"
+        style="
+        max-width:95%;
+        max-height:95%;
+        border-radius:15px;
+        ">
+
+    `;
+
+    preview.onclick=()=>preview.remove();
+
+    document.body.appendChild(preview);
+
+};
