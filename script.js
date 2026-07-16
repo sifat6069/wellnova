@@ -50,7 +50,9 @@ async function loadWallpapers(category = "Nature", page = 1) {
         console.log(data);
         
         console.log(data);
-
+        
+        console.log(data.photos.length);
+        
         if (page === 1) {
 
             gallery.innerHTML = "";
