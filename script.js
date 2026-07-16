@@ -3,7 +3,7 @@
 // Pexels API
 // ================================
 
-const API_KEY = "YOUR_PEXELS_API_KEY";
+const API_KEY = "oeCD73YhbmBgbuMliS2AV6LpVkmqTqd0X37oLyftyros7wAJfl7CCrgl";
 
 const gallery = document.querySelector(".gallery");
 const searchBox = document.getElementById("searchBox");
@@ -56,17 +56,29 @@ async function loadWallpapers(category = "Nature", page = 1) {
 
             <div class="card">
 
-                <img src="${photo.src.large2x}" alt="${photo.alt}">
+              <div class="card">
 
-                <h3>${photo.photographer}</h3>
+<img
+src="${photo.src.large2x}"
+alt="${photo.alt}"
+onclick="previewWallpaper('${photo.src.original}')"
+style="cursor:pointer;">
 
-                <button onclick="downloadWallpaper('${photo.src.original}')">
+<h3>${photo.photographer}</h3>
 
-                Download
+<div class="actions">
 
-                </button>
+<button onclick="downloadWallpaper('${photo.src.original}')">
+⬇ Download
+</button>
 
-            </div>
+<button onclick="this.innerHTML='❤️ Liked'">
+🤍 Like
+</button>
+
+</div>
+
+</div>
 
             `;
 
