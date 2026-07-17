@@ -1,132 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-
-<title>WallNova</title>
+<title>WallNova - HD Wallpapers</title>
 
 <link rel="stylesheet" href="style.css">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
 </head>
-
 <body>
+
+<!-- ================= HEADER ================= -->
 
 <header>
 
 <div class="logo">
-WallNova
+
+🖼️ WallNova
+
 </div>
 
-<nav>
+<div class="search">
 
-<a href="#">Home</a>
+<input
+type="text"
+id="searchBox"
+placeholder="Search Wallpapers...">
 
-<a href="#categories">Categories</a>
+</div>
 
-<a href="#">Trending</a>
+<div class="user-area">
 
-<a href="#">Latest</a>
+<button id="loginBtn">
 
-<a href="#">About</a>
+Login with Google
 
-<img id="userPhoto" style="display:none;">
+</button>
+
+<div class="user-info">
+
+<img
+id="userPhoto"
+src=""
+alt=""
+style="display:none;">
 
 <span id="userName"></span>
 
-<button id="loginBtn">
-Login
-</button>
+</div>
 
-</nav>
+</div>
 
 </header>
 
+<!-- ================= CATEGORY ================= -->
+
+<section class="categories">
+
+<button data-category="Nature">Nature</button>
+
+<button data-category="Cars">Cars</button>
+
+<button data-category="Animals">Animals</button>
+
+<button data-category="Anime">Anime</button>
+
+<button data-category="Technology">Technology</button>
+
+<button data-category="Gaming">Gaming</button>
+
+<button data-category="Dark">Dark</button>
+
+<button data-category="Space">Space</button>
+
+<button data-category="Abstract">Abstract</button>
+
+<button data-category="Mountains">Mountains</button>
+
+<button data-category="City">City</button>
+
+<button data-category="Flowers">Flowers</button>
+
+</section>
+
+<!-- ================= HERO ================= -->
+
 <section class="hero">
-
-<div class="overlay"></div>
-
-<div class="hero-content">
 
 <h1>
 
-Find Beautiful Wallpapers
+Download Free HD & 4K Wallpapers
 
 </h1>
 
 <p>
 
-Millions of HD & 4K Wallpapers
+Powered by Pexels API
 
 </p>
 
-<input
-id="searchBox"
-type="text"
-placeholder="Search Wallpapers..."
->
-
-</div>
-
 </section>
 
-<section
-class="categories"
-id="categories"
->
-
-<button data-category="Nature">
-Nature
-</button>
-
-<button data-category="Cars">
-Cars
-</button>
-
-<button data-category="Gaming">
-Gaming
-</button>
-
-<button data-category="Anime">
-Anime
-</button>
-
-<button data-category="Space">
-Space
-</button>
-
-<button data-category="AMOLED">
-AMOLED
-</button>
-
-</section>
+<!-- ================= GALLERY ================= -->
 
 <section class="gallery">
 
 </section>
 
-<div
-id="loading"
-style="
-text-align:center;
-padding:40px;
-display:none;
-font-size:20px;
-">
+<!-- ================= LOADING ================= -->
+
+<div id="loading">
 
 Loading Wallpapers...
 
 </div>
+
+<!-- ================= PREVIEW ================= -->
+
+<div id="previewContainer"></div>
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+© 2026 WallNova. All Rights Reserved.
+
+</footer>
+
+<!-- ================= SCRIPT ================= -->
 
 <script type="module" src="firebase.js"></script>
 
 <script type="module" src="script.js"></script>
 
 </body>
-
 </html>
