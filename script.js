@@ -1,3 +1,17 @@
+import {
+  auth,
+  db,
+  provider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged
+} from "./firebase.js";
+
+import {
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
 console.log("script.js loaded");
 // ================================
 // WallNova v2.0
@@ -7,6 +21,12 @@ console.log("script.js loaded");
 const API_KEY = "oeCD73YhbmBgbuMliS2AV6LpVkmqTqd0X37oLyftyros7wAJfl7CCrgl";
 
 const gallery = document.querySelector(".gallery");
+const loginBtn = document.getElementById("loginBtn");
+const userPhoto = document.getElementById("userPhoto");
+const userName = document.getElementById("userName");
+
+const ADMIN_EMAIL = "khalidsaifullahsifat@gmail.com";
+
 const searchBox = document.getElementById("searchBox");
 
 let currentCategory = "Nature";
@@ -120,7 +140,74 @@ window.downloadWallpaper = function(url){
 // ================================
 
 loadWallpapers();
+// ================================
+// Google Login
+// ================================
 
+loginBtn.addEventListener("click", async () => {
+
+    if (auth.currentUser) {
+
+        await signOut(auth);
+        return;
+
+    }
+
+    try {
+
+        await signInWithPopup(auth, provider);
+
+    } catch (err) {
+
+        alert(err.message);
+
+    }
+
+});
+
+// ================================
+// Auth State
+// ================================
+
+onAuthStateChanged(auth, async (user) => {
+
+    if (!user) {
+
+        loginBtn.textContent = "Login with Google";
+
+        userName.textContent = "";
+
+        userPhoto.style.display = "none";
+
+        return;
+
+    }
+
+    loginBtn.textContent = "Logout";
+
+    userName.textContent = user.displayName;
+
+    userPhoto.src = user.photoURL;
+
+    userPhoto.style.display = "block";
+
+    await setDoc(doc(db, "users", user.uid), {
+
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        photo: user.photoURL,
+        lastLogin: Date.now()
+
+    }, { merge: true });
+
+    if (user.email === ADMIN_EMAIL) {
+
+        console.log("✅ Admin Login");
+
+    }
+
+});
 // ===================================
 // CATEGORY BUTTONS
 // ===================================
