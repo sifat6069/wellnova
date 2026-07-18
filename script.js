@@ -14,30 +14,31 @@ import {
   deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-console.log("script.js loaded");
-// ================================
-// WallNova v2.0
+// ==============================
 // Pexels API
-// ================================
+// ==============================
 
-const API_KEY = "oeCD73YhbmBgbuMliS2AV6LpVkmqTqd0X37oLyftyros7wAJfl7CCrgl";
+const API_KEY = "YOUR_PEXELS_API_KEY";
+
+// ==============================
+// Elements
+// ==============================
 
 const gallery = document.querySelector(".gallery");
+const searchBox = document.getElementById("searchBox");
 const loginBtn = document.getElementById("loginBtn");
 const userPhoto = document.getElementById("userPhoto");
 const userName = document.getElementById("userName");
 
 const ADMIN_EMAIL = "khalidsaifullahsifat@gmail.com";
 
-const searchBox = document.getElementById("searchBox");
-
 let currentCategory = "Nature";
 let currentPage = 1;
 let loading = false;
 
-// ================================
+// ==============================
 // Load Wallpapers
-// ================================
+// ==============================
 
 async function loadWallpapers(category = "Nature", page = 1) {
 
@@ -50,98 +51,53 @@ async function loadWallpapers(category = "Nature", page = 1) {
     try {
 
         const response = await fetch(
-
             `https://api.pexels.com/v1/search?query=${category}&per_page=24&page=${page}`,
-
             {
-
                 headers: {
-
                     Authorization: API_KEY
-
                 }
-
             }
-
         );
-
-        console.log(response.status);
 
         const data = await response.json();
 
-        console.log(data);
-        
-        console.log(data);
-        
-        console.log(data.photos.length);
-        
         if (page === 1) {
-
             gallery.innerHTML = "";
-
         }
 
-      data.photos.forEach(photo => {
+        data.photos.forEach(photo => {
 
-    gallery.innerHTML += `
-    <div class="card">
+            gallery.innerHTML += `
+            <div class="card">
 
-        <img
-            src="${photo.src.large2x}"
-            alt="${photo.alt}"
-            onclick="previewWallpaper('${photo.src.original}')"
-            style="cursor:pointer;"
-        >
+                <img
+                    src="${photo.src.large2x}"
+                    alt="${photo.alt}"
+                    onclick="previewWallpaper('${photo.src.original}')"
+                    style="cursor:pointer;">
 
-        <h3>${photo.photographer}</h3>
+                <h3>${photo.photographer}</h3>
 
-        <div class="actions">
+                <div class="actions">
 
-            <button onclick="downloadWallpaper('${photo.src.original}')">
-                ⬇ Download
-            </button>
+                    <button onclick="downloadWallpaper('${photo.src.original}')">
+                        ⬇ Download
+                    </button>
 
-            <button onclick="toggleLike('${photo.id}', this)">
-                🤍 Like
-            </button>
+                    <button onclick="toggleLike('${photo.id}', this)">
+                        🤍 Like
+                    </button>
 
-        </div>
+                </div>
 
-    </div>
-    `;
-
-});
-</div>
-
-<img
-src="${photo.src.large2x}"
-alt="${photo.alt}"
-onclick="previewWallpaper('${photo.src.original}')"
-style="cursor:pointer;">
-
-<h3>${photo.photographer}</h3>
-
-<div class="actions">
-
-<button onclick="downloadWallpaper('${photo.src.original}')">
-⬇ Download
-</button>
-
-<button onclick="toggleLike('${photo.id}', this)">
-🤍 Like
-</button>
-
-</div>
-
-</div>
-
+            </div>
             `;
 
         });
 
-    } catch (error) {
+    } catch (err) {
 
-        console.error(error);
+        console.error(err);
 
     }
 
@@ -151,24 +107,12 @@ style="cursor:pointer;">
 
 }
 
-// ================================
-// Download
-// ================================
-
-window.downloadWallpaper = function(url){
-
-    window.open(url,"_blank");
-
-};
-
-// ================================
 // First Load
-// ================================
-
 loadWallpapers();
-// ================================
-// Google Login
-// ================================
+
+// =====================================
+// Google Login / Logout
+// =====================================
 
 loginBtn.addEventListener("click", async () => {
 
@@ -191,9 +135,9 @@ loginBtn.addEventListener("click", async () => {
 
 });
 
-// ================================
+// =====================================
 // Auth State
-// ================================
+// =====================================
 
 onAuthStateChanged(auth, async (user) => {
 
@@ -217,6 +161,8 @@ onAuthStateChanged(auth, async (user) => {
 
     userPhoto.style.display = "block";
 
+    // Save user to Firestore
+
     await setDoc(doc(db, "users", user.uid), {
 
         uid: user.uid,
@@ -227,6 +173,8 @@ onAuthStateChanged(auth, async (user) => {
 
     }, { merge: true });
 
+    // Admin Check
+
     if (user.email === ADMIN_EMAIL) {
 
         console.log("✅ Admin Login");
@@ -234,97 +182,94 @@ onAuthStateChanged(auth, async (user) => {
     }
 
 });
-// ===================================
-// CATEGORY BUTTONS
-// ===================================
+// =====================================
+// Download
+// =====================================
 
-document.querySelectorAll(".categories button").forEach(button => {
+window.downloadWallpaper = function(url){
 
-    button.addEventListener("click", () => {
+    window.open(url,"_blank");
 
-        currentCategory = button.dataset.category;
+};
 
-        currentPage = 1;
+// =====================================
+// Full Screen Preview
+// =====================================
 
-        loadWallpapers(currentCategory, currentPage);
+window.previewWallpaper = function(url){
 
-    });
+    const preview = document.getElementById("previewContainer");
 
-});
+    preview.innerHTML = `
+        <img src="${url}">
+    `;
 
-// ===================================
-// SEARCH
-// ===================================
+    preview.classList.add("show");
 
-searchBox.addEventListener("keypress", (e) => {
+    preview.onclick = () => {
 
-    if (e.key === "Enter") {
+        preview.classList.remove("show");
+
+        preview.innerHTML = "";
+
+    };
+
+};
+
+// =====================================
+// Search
+// =====================================
+
+searchBox.addEventListener("keypress", (e)=>{
+
+    if(e.key==="Enter"){
 
         currentCategory = searchBox.value.trim();
 
         currentPage = 1;
 
-        loadWallpapers(currentCategory, currentPage);
+        loadWallpapers(currentCategory,currentPage);
 
     }
 
 });
 
-// ===================================
-// INFINITE SCROLL
-// ===================================
+// =====================================
+// Category Buttons
+// =====================================
 
-window.addEventListener("scroll", () => {
+document.querySelectorAll(".categories button").forEach(btn=>{
 
-    if (
-        window.innerHeight + window.scrollY >=
-        document.body.offsetHeight - 300
-    ) {
+    btn.addEventListener("click",()=>{
+
+        currentCategory = btn.dataset.category;
+
+        currentPage = 1;
+
+        loadWallpapers(currentCategory,currentPage);
+
+    });
+
+});
+
+// =====================================
+// Infinite Scroll
+// =====================================
+
+window.addEventListener("scroll",()=>{
+
+    if(window.innerHeight + window.scrollY >= document.body.offsetHeight - 300){
 
         currentPage++;
 
-        loadWallpapers(currentCategory, currentPage);
+        loadWallpapers(currentCategory,currentPage);
 
     }
 
 });
-
-// ======================================
-// FULL SCREEN IMAGE
-// ======================================
-
-window.previewWallpaper = function(url){
-
-    const preview = document.createElement("div");
-
-    preview.style.position="fixed";
-    preview.style.left="0";
-    preview.style.top="0";
-    preview.style.width="100%";
-    preview.style.height="100%";
-    preview.style.background="rgba(0,0,0,.95)";
-    preview.style.display="flex";
-    preview.style.alignItems="center";
-    preview.style.justifyContent="center";
-    preview.style.zIndex="99999";
-
-    preview.innerHTML=`
-
-        <img
-        src="${url}"
-        style="
-        max-width:95%;
-        max-height:95%;
-        border-radius:15px;
-        ">
-
-    `;
-
-    preview.onclick=()=>preview.remove();
-
-    document.body.appendChild(preview);
-
-};
+// =====================================
+// Like System
+// =====================================
 
 window.toggleLike = async function (wallpaperId, button) {
 
@@ -343,25 +288,89 @@ window.toggleLike = async function (wallpaperId, button) {
         wallpaperId.toString()
     );
 
-    const snap = await getDoc(likeRef);
+    try {
 
-    if (snap.exists()) {
+        const snap = await getDoc(likeRef);
 
-        await deleteDoc(likeRef);
+        if (snap.exists()) {
 
-        button.innerHTML = "🤍 Like";
+            await deleteDoc(likeRef);
 
-    } else {
+            button.innerHTML = "🤍 Like";
 
-        await setDoc(likeRef, {
+        } else {
 
-            liked: true,
-            time: Date.now()
+            await setDoc(likeRef, {
+                wallpaperId: wallpaperId,
+                liked: true,
+                time: Date.now()
+            });
 
-        });
+            button.innerHTML = "❤️ Liked";
 
-        button.innerHTML = "❤️ Liked";
+        }
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert("Like failed!");
 
     }
 
 };
+
+// =====================================
+// Load Like Status
+// =====================================
+
+async function loadLikeStatus(wallpaperId, button){
+
+    if(!auth.currentUser) return;
+
+    const uid = auth.currentUser.uid;
+
+    const likeRef = doc(
+        db,
+        "likes",
+        uid,
+        "wallpapers",
+        wallpaperId.toString()
+    );
+
+    const snap = await getDoc(likeRef);
+
+    if(snap.exists()){
+
+        button.innerHTML="❤️ Liked";
+
+    }
+
+}
+
+// =====================================
+// Admin Check
+// =====================================
+
+function isAdmin(){
+
+    return auth.currentUser &&
+           auth.currentUser.email === ADMIN_EMAIL;
+
+}
+
+// =====================================
+// Admin Console
+// =====================================
+
+if(isAdmin()){
+
+    console.log("👑 Admin Mode Enabled");
+
+}
+
+// =====================================
+// WallNova Ready
+// =====================================
+
+console.log("✅ WallNova v3 Loaded");
