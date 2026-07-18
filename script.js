@@ -18,7 +18,7 @@ import {
 // Pexels API
 // ==============================
 
-const API_KEY = "YOUR_PEXELS_API_KEY";
+const API_KEY = "oeCD73YhbmBgbuMliS2AV6LpVkmqTqd0X37oLyftyros7wAJfl7CCrgl";
 
 // ==============================
 // Elements
