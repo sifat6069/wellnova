@@ -87,7 +87,7 @@ async function loadWallpapers(category="Nature",page=1){
             `;
 
         });
-
+await restoreLikeStatus();
     }catch(err){
 
         console.error(err);
