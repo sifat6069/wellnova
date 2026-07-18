@@ -81,9 +81,7 @@ async function loadWallpapers(category = "Nature", page = 1) {
 
         }
 
-        data.photos.forEach(photo => {
-
-data.photos.forEach(photo => {
+      data.photos.forEach(photo => {
 
     gallery.innerHTML += `
     <div class="card">
@@ -113,7 +111,6 @@ data.photos.forEach(photo => {
     `;
 
 });
-          
 </div>
 
 <img
