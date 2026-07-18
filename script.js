@@ -82,12 +82,11 @@ async function loadWallpapers(category="Nature",page=1){
                     ⬇ Download
                     </button>
 
-                  <button
-                      class="likeBtn"
-                      data-id="${photo.id}"
-                      onclick="toggleLike('${photo.id}', this)">
-                      🤍 Like
-                  </button>
+                 <button class="likeBtn"
+data-id="${photo.id}"
+onclick="toggleLike('${photo.id}', this)">
+🤍 Like (<span id="count-${photo.id}">0</span>)
+</button>
 
                 </div>
 
