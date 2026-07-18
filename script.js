@@ -283,18 +283,25 @@ window.toggleLike = async function (wallpaperId, button) {
         uid,
         "wallpapers",
         wallpaperId.toString()
-    );
+      const wallpaperRef = doc(db, "wallpapers", wallpaperId.toString());
 
     try {
 
         const snap = await getDoc(likeRef);
 
-        if (snap.exists()) {
+        if await deleteDoc(likeRef);
 
-            await deleteDoc(likeRef);
+await setDoc(
+    wallpaperRef,
+    {
+        likes: increment(-1)
+    },
+    { merge: true }
+);
 
-            button.innerHTML = "🤍 Like";
-
+button.innerHTML =
+`🤍 Like (<span id="count-${wallpaperId}"></span>)`;
+      
         } else {
 
             await setDoc(likeRef, {
