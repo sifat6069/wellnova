@@ -68,6 +68,17 @@ async function loadWallpapers(category = "Nature", page = 1) {
         data.photos.forEach(photo => {
 
             gallery.innerHTML += `
+            setTimeout(()=>{
+
+const btns=document.querySelectorAll(".likeBtn");
+
+btns.forEach((btn,index)=>{
+
+loadLikeStatus(data.photos[index].id,btn);
+
+});
+
+},100);
             <div class="card">
 
                 <img
@@ -84,9 +95,11 @@ async function loadWallpapers(category = "Nature", page = 1) {
                         ⬇ Download
                     </button>
 
-                    <button onclick="toggleLike('${photo.id}', this)">
-                        🤍 Like
-                    </button>
+                   <button
+class="likeBtn"
+onclick="toggleLike('${photo.id}', this)">
+🤍 Like
+</button>
 
                 </div>
 
