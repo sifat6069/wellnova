@@ -103,7 +103,7 @@ style="cursor:pointer;">
 ⬇ Download
 </button>
 
-<button onclick="this.innerHTML='❤️ Liked'">
+<button onclick="toggleLike('${photo.id}', this)">
 🤍 Like
 </button>
 
@@ -299,5 +299,45 @@ window.previewWallpaper = function(url){
     preview.onclick=()=>preview.remove();
 
     document.body.appendChild(preview);
+
+};
+
+window.toggleLike = async function (wallpaperId, button) {
+
+    if (!auth.currentUser) {
+        alert("Please login first.");
+        return;
+    }
+
+    const uid = auth.currentUser.uid;
+
+    const likeRef = doc(
+        db,
+        "likes",
+        uid,
+        "wallpapers",
+        wallpaperId.toString()
+    );
+
+    const snap = await getDoc(likeRef);
+
+    if (snap.exists()) {
+
+        await deleteDoc(likeRef);
+
+        button.innerHTML = "🤍 Like";
+
+    } else {
+
+        await setDoc(likeRef, {
+
+            liked: true,
+            time: Date.now()
+
+        });
+
+        button.innerHTML = "❤️ Liked";
+
+    }
 
 };
