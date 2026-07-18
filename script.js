@@ -73,10 +73,12 @@ async function loadWallpapers(category="Nature",page=1){
                     ⬇ Download
                     </button>
 
-                    <button class="likeBtn"
-                    onclick="toggleLike('${photo.id}',this)">
-                    🤍 Like
-                    </button>
+                  <button
+                      class="likeBtn"
+                      data-id="${photo.id}"
+                      onclick="toggleLike('${photo.id}', this)">
+                      🤍 Like
+                  </button>
 
                 </div>
 
@@ -167,5 +169,177 @@ onAuthStateChanged(auth, async (user) => {
     }
 
 });
+// =========================================
+// Download
+// =========================================
+
+window.downloadWallpaper = function(url){
+
+    window.open(url, "_blank");
+
+};
+
+// =========================================
+// Full Screen Preview
+// =========================================
+
+window.previewWallpaper = function(url){
+
+    const preview = document.getElementById("previewContainer");
+
+    preview.innerHTML = `
+        <img src="${url}">
+    `;
+
+    preview.classList.add("show");
+
+    preview.onclick = () => {
+
+        preview.classList.remove("show");
+
+        preview.innerHTML = "";
+
+    };
+
+};
+
+// =========================================
+// Search
+// =========================================
+
+searchBox.addEventListener("keypress", (e) => {
+
+    if (e.key === "Enter") {
+
+        currentCategory = searchBox.value.trim() || "Nature";
+        currentPage = 1;
+
+        loadWallpapers(currentCategory, currentPage);
+
+    }
+
+});
+
+// =========================================
+// Category Buttons
+// =========================================
+
+document.querySelectorAll(".categories button").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        currentCategory = btn.dataset.category;
+        currentPage = 1;
+
+        loadWallpapers(currentCategory, currentPage);
+
+    });
+
+});
+
+// =========================================
+// Infinite Scroll
+// =========================================
+
+window.addEventListener("scroll", () => {
+
+    if (
+        window.innerHeight + window.scrollY >=
+        document.body.offsetHeight - 300 &&
+        !loading
+    ) {
+
+        currentPage++;
+
+        loadWallpapers(currentCategory, currentPage);
+
+    }
+
+});
+// =========================================
+// Like System
+// =========================================
+
+window.toggleLike = async function (wallpaperId, button) {
+
+    if (!auth.currentUser) {
+        alert("Please login first.");
+        return;
+    }
+
+    const uid = auth.currentUser.uid;
+
+    const likeRef = doc(
+        db,
+        "likes",
+        uid,
+        "wallpapers",
+        wallpaperId.toString()
+    );
+
+    try {
+
+        const snap = await getDoc(likeRef);
+
+        if (snap.exists()) {
+
+            await deleteDoc(likeRef);
+
+            button.innerHTML = "🤍 Like";
+
+        } else {
+
+            await setDoc(likeRef, {
+                wallpaperId,
+                liked: true,
+                createdAt: Date.now()
+            });
+
+            button.innerHTML = "❤️ Liked";
+
+        }
+
+    } catch (err) {
+
+        console.error(err);
+        alert("Failed to update like.");
+
+    }
+
+};
+
+// =========================================
+// Restore Like Status
+// =========================================
+
+async function restoreLikeStatus() {
+
+    if (!auth.currentUser) return;
+
+    const buttons = document.querySelectorAll(".likeBtn");
+
+    for (const btn of buttons) {
+
+        const wallpaperId = btn.getAttribute("data-id");
+
+        if (!wallpaperId) continue;
+
+        const likeRef = doc(
+            db,
+            "likes",
+            auth.currentUser.uid,
+            "wallpapers",
+            wallpaperId
+        );
+
+        const snap = await getDoc(likeRef);
+
+        if (snap.exists()) {
+            btn.innerHTML = "❤️ Liked";
+        }
+
+    }
+
+}
 
 loadWallpapers();
