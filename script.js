@@ -83,33 +83,37 @@ async function loadWallpapers(category = "Nature", page = 1) {
 
         data.photos.forEach(photo => {
 
-gallery.innerHTML += `
-<div class="card">
+data.photos.forEach(photo => {
 
-    <img
-        src="${photo.src.large2x}"
-        alt="${photo.alt}"
-        onclick="previewWallpaper('${photo.src.original}')"
-        style="cursor:pointer;"
-    >
+    gallery.innerHTML += `
+    <div class="card">
 
-    <h3>${photo.photographer}</h3>
+        <img
+            src="${photo.src.large2x}"
+            alt="${photo.alt}"
+            onclick="previewWallpaper('${photo.src.original}')"
+            style="cursor:pointer;"
+        >
 
-    <div class="actions">
+        <h3>${photo.photographer}</h3>
 
-        <button onclick="downloadWallpaper('${photo.src.original}')">
-            ⬇ Download
-        </button>
+        <div class="actions">
 
-        <button onclick="toggleLike('${photo.id}', this)">
-            🤍 Like
-        </button>
+            <button onclick="downloadWallpaper('${photo.src.original}')">
+                ⬇ Download
+            </button>
+
+            <button onclick="toggleLike('${photo.id}', this)">
+                🤍 Like
+            </button>
+
+        </div>
 
     </div>
+    `;
 
-</div>
-`;
-
+});
+          
 </div>
 
 <img
